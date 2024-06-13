@@ -1,118 +1,219 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Welcome from "./src/screens/Welcome";
+import Login from "./src/screens/Login";
+import Signup from "./src/screens/Signup";
+import Homeuser from "./src/userpage/Homeuser";
+import Userdash from "./src/userpage/Userdash";
+import { StyleSheet, View } from "react-native";
+import Profile from "./src/userpage/Profile";
+import Result from "./src/userpage/Result";
+import Resultdetails from "./src/userpage/Resultdetails";
+import Contact from "./src/userpage/Contact";
+import Mycourse from "./src/userpage/Mycourse";
+import Timetable from "./src/userpage/Timetable";
+import Notice from "./src/userpage/Notice";
+import Explore from "./src/userpage/Explore";
+import Adminhome from "./src/adminpage/Adminhome";
+import Admindash from "./src/adminpage/Admindash";
+import Lecturevideo from "./src/adminpage/Lecturevideo";
+import Addlecture from "./src/adminpage/Addlecture";
+import Adminprofile from "./src/adminpage/Adminprofile";
+// import Examwrite from "./src/userpage/Examwrite";
+import Chatwithadmin from "./src/userpage/Chatwithadmin";
+import Allresult from "./src/adminpage/Allresult";
+import Updatepage from "./src/adminpage/Updatepage";
+import Admintimetable from "./src/adminpage/Admintimetable";
+import Noticeadmin from "./src/adminpage/Noticeadmin";
+import Admincontact from "./src/adminpage/Admincontact";
+import WatchLecture from "./src/userpage/WatchLecture";
+import Chatlist from "./src/adminpage/Chatlist";
+import Viewpdf from "./src/adminpage/Viewpdf";
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+const Stack = createNativeStackNavigator();
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+export default function App() {
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+    <View style={styles.container}>
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="Welcome"
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="Welcome" component={Welcome} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Signup" component={Signup} />
+         <Stack.Screen name="Userdash" component={Userdash} />
+        <Stack.Screen name="homeuser" component={Homeuser} />
+       <Stack.Screen
+          name="Profileuser"
+          component={Profile}
+          options={{
+            headerShown: true,
+          }}
+        />
+         <Stack.Screen
+          name="Result"
+          component={Result}
+          options={{
+            headerShown: true,
+          }}
+        />
+        <Stack.Screen
+          name="Resultdetails"
+          component={Resultdetails}
+          options={{
+            headerShown: true,
+          }}
+        />
+       <Stack.Screen
+          name="Contact"
+          component={Contact}
+          options={{
+            headerShown: true,
+          }}
+        />
+        <Stack.Screen
+          name="My course"
+          component={Mycourse}
+          options={{
+            headerShown: true,
+          }}
+        />
+        <Stack.Screen
+          name="Time-Table"
+          component={Timetable}
+          options={{
+            headerShown: true,
+          }}
+        />
+        <Stack.Screen
+          name="Notice"
+          component={Notice}
+          options={{
+            headerShown: true,
+          }}
+        /> 
+        <Stack.Screen
+          name="Explore"
+          component={Explore}
+          options={{
+            headerShown: true,
+          }}
+        />
+        <Stack.Screen
+          name="Adminhome"
+          component={Adminhome}
+          options={{
+            headerShown: true,
+          }}
+        />
+        <Stack.Screen
+          name="Admindash"
+          component={Admindash}
+          options={{
+            headerShown: true,
+          }}
+        /> 
+      <Stack.Screen
+          name="Add Lecture"
+          component={Lecturevideo}
+          options={{
+            headerShown: true,
+          }}
+        />
+        <Stack.Screen
+          name="Add Video"
+          component={Addlecture}
+          options={{
+            headerShown: true,
+          }}
+        />
+          <Stack.Screen
+          name="Admin-Profile"
+          component={Adminprofile}
+          options={{
+            headerShown: true,
+          }}
+        />
+        <Stack.Screen
+          name="Class"
+          component={WatchLecture}
+        />
+         {/* <Stack.Screen
+          name="Write-Exam"
+          component={Examwrite}
+          options={{
+            headerShown: false,
+          }}
+        /> */}
+        <Stack.Screen
+          name="Chat Us"
+          component={Chatwithadmin}
+          options={{
+            headerShown: true,
+          }}
+        />
+         <Stack.Screen
+          name="Update"
+          component={Updatepage}
+          options={{
+            headerShown: false,
+          }}
+        />
+          <Stack.Screen
+          name="Admin Result"
+          component={Allresult}
+          options={{
+            headerShown: true,
+          }}
+        />
+          <Stack.Screen
+          name="Admin Timetable"
+          component={Admintimetable}
+          options={{
+            headerShown: true,
+          }}
+        />
+         <Stack.Screen
+          name="Admin Notice"
+          component={Noticeadmin}
+          options={{
+            headerShown: true,
+          }}
+        />
+         <Stack.Screen
+          name="All Query"
+          component={Admincontact}
+          options={{
+            headerShown: true,
+          }}
+        />
+         <Stack.Screen
+          name="Chat List"
+          component={Chatlist}
+          options={{
+            headerShown: true,
+          }}
+        />
+          <Stack.Screen
+          name="Pdf View"
+          component={Viewpdf}
+          options={{
+            headerShown: true,
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
     </View>
   );
 }
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
-
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  container: {
+    flex: 1,
+    backgroundColor: "white", // Set the background color to white
   },
 });
-
-export default App;
