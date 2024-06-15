@@ -5,6 +5,7 @@ import Orientation from "react-native-orientation-locker";
 
 const Mycourse = ({ route, navigation }) => {
   const { course } = route.params;
+  console.log(course.lectures)
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [showExamModal, setShowExamModal] = useState(false);
 
@@ -46,7 +47,7 @@ const Mycourse = ({ route, navigation }) => {
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Course Description</Text>
-          <Text style={styles.description}>{course.description}</Text>
+          <Text style={styles.description}>{course.coursetitle}</Text>
         </View>
 
         <View style={styles.section}>
@@ -58,7 +59,7 @@ const Mycourse = ({ route, navigation }) => {
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Video Lectures</Text>
-          {course.lectures.map((lecture, index) => (
+          {course.lectures.length > 0 ? ( course.lectures.map((lecture, index) => (
             <TouchableOpacity
               key={index}
               style={styles.lecture}
@@ -67,7 +68,12 @@ const Mycourse = ({ route, navigation }) => {
               <Text style={styles.lectureTitle}>{`Lecture ${index + 1}: ${lecture.title}`}</Text>
               <Text style={styles.lectureDescription}>{lecture.description}</Text>
             </TouchableOpacity>
-          ))}
+          ))):
+          (
+            <Text>No Lecture Found</Text>
+          )
+        
+        }
         </View>
       </ScrollView>
 
@@ -83,7 +89,7 @@ const Mycourse = ({ route, navigation }) => {
         animationType="slide"
         onRequestClose={handleCloseExamModal}
       >
-        <View style={styles.examModalContainer}>
+        {/* <View style={styles.examModalContainer}>
           <View style={styles.examModalContent}>
             <Text style={styles.examModalTitle}>Choose an Exam</Text>
             {course.exams.map((exam, index) => (
@@ -99,7 +105,7 @@ const Mycourse = ({ route, navigation }) => {
               </TouchableOpacity>
             ))}
           </View>
-        </View>
+        </View> */}
       </Modal>
     </View>
   );

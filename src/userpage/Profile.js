@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -15,8 +15,10 @@ import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons1 from 'react-native-vector-icons/MaterialIcons';
 import Ionicons2 from 'react-native-vector-icons/Fontisto';
 import Ionicons3 from 'react-native-vector-icons/AntDesign';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
-const Profile = () => {
+const Profile = ({navigation}) => {
   const [changeNameModalVisible, setChangeNameModalVisible] = useState(false);
   const [changePasswordModalVisible, setChangePasswordModalVisible] =
     useState(false);
@@ -24,6 +26,9 @@ const Profile = () => {
   const [newPassword, setNewPassword] = useState('');
   const [profileImage, setProfileImage] = useState('');
   const [addImageModalVisible, setAddImageModalVisible] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
 
   const handleChangeName = () => {
     setChangeNameModalVisible(false);
@@ -59,14 +64,30 @@ const Profile = () => {
     }
   };
 
-  const handleLogout = () => {
-    // Logic for logout
+  const handleLogout = async () => {
+    await AsyncStorage.clear();
+    Toast.show({
+      type: 'success',
+      text1: 'Logout Successfully',
+    });
+    setTimeout(() => {
+      navigation.navigate('Login');
+    }, 500);
   };
 
+  useEffect(() => {
+    const name = AsyncStorage.getItem('name');
+    const email = AsyncStorage.getItem('email');
+    const phone = AsyncStorage.getItem('phone');
+    setName(name);
+    setEmail(email);
+    setPhone(phone);
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topSection}>
         {/* Profile Image */}
+        <Toast />
         <TouchableOpacity onPress={handleChangeProfilePic}>
           <Image
             source={
@@ -78,9 +99,9 @@ const Profile = () => {
           />
         </TouchableOpacity>
 
-        <Text style={styles.profileName}>John Doe</Text>
-        <Text style={styles.profileInfo}>Phone: +1234567890</Text>
-        <Text style={styles.profileInfo}>Email: johndoe@example.com</Text>
+        <Text style={styles.profileName}>{name}</Text>
+        <Text style={styles.profileInfo}>Phone: +91 {phone}</Text>
+        <Text style={styles.profileInfo}>Email: {email}</Text>
       </View>
 
       <ScrollView style={styles.optionsContainer}>
@@ -88,11 +109,7 @@ const Profile = () => {
         <TouchableOpacity
           style={styles.optionItem}
           onPress={() => setChangeNameModalVisible(true)}>
-          <Ionicons
-            name="rename-box"
-            color="red"
-            size={22}
-          />
+          <Ionicons name="rename-box" color="red" size={22} />
           <Text style={{color: 'black', marginLeft: 30}}>Change Name</Text>
         </TouchableOpacity>
 
@@ -126,8 +143,7 @@ const Profile = () => {
         animationType="slide"
         transparent={true}
         visible={changeNameModalVisible}
-        onRequestClose={() => setChangeNameModalVisible(false)}
-      >
+        onRequestClose={() => setChangeNameModalVisible(false)}>
         <View style={styles.modalContainer}>
           {/* <View style={styles.modalHeader}>
             <TouchableOpacity
@@ -142,19 +158,18 @@ const Profile = () => {
             {/* Change Name */}
             <TouchableOpacity
               onPress={() => setChangeNameModalVisible(false)}
-              style={[styles.closeIcon, { alignItems: "flex-end" }]}
-            >
+              style={[styles.closeIcon, {alignItems: 'flex-end'}]}>
               <Ionicons
                 name="close"
                 size={24}
                 color="black"
-                style={{ marginRight: 10 }}
+                style={{marginRight: 10}}
               />
             </TouchableOpacity>
             <TextInput
               style={styles.input}
               placeholder="Enter new name"
-              onChangeText={(text) => setNewName(text)}
+              onChangeText={text => setNewName(text)}
               placeholderTextColor="black"
             />
             <TouchableOpacity style={styles.button} onPress={handleChangeName}>
@@ -169,32 +184,29 @@ const Profile = () => {
         animationType="slide"
         transparent={true}
         visible={changePasswordModalVisible}
-        onRequestClose={() => setChangePasswordModalVisible(false)}
-      >
+        onRequestClose={() => setChangePasswordModalVisible(false)}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             {/* Change Password */}
             <TouchableOpacity
               onPress={() => setChangePasswordModalVisible(false)}
-              style={[styles.closeIcon, { alignItems: "flex-end" }]}
-            >
+              style={[styles.closeIcon, {alignItems: 'flex-end'}]}>
               <Ionicons
                 name="close"
                 size={24}
                 color="black"
-                style={{ marginRight: 10 }}
+                style={{marginRight: 10}}
               />
             </TouchableOpacity>
             <TextInput
               style={styles.input}
               placeholder="Enter new password"
               placeholderTextColor="black"
-              onChangeText={(text) => setNewPassword(text)}
+              onChangeText={text => setNewPassword(text)}
             />
             <TouchableOpacity
               style={styles.button}
-              onPress={handleChangePassword}
-            >
+              onPress={handleChangePassword}>
               <Text style={styles.buttonText}>Save</Text>
             </TouchableOpacity>
           </View>
@@ -205,13 +217,11 @@ const Profile = () => {
         animationType="slide"
         transparent={true}
         visible={addImageModalVisible}
-        onRequestClose={() => setAddImageModalVisible(false)}
-      >
+        onRequestClose={() => setAddImageModalVisible(false)}>
         <View style={styles.modalContainer}>
           <TouchableOpacity
             style={styles.closeButton}
-            onPress={() => setAddImageModalVisible(false)}
-          >
+            onPress={() => setAddImageModalVisible(false)}>
             <Text style={styles.closeButtonText}>✕</Text>
           </TouchableOpacity>
           <View style={styles.modalContent}>
@@ -269,38 +279,38 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalHeader: {
-    width: "100%",
-    alignItems: "flex-end",
+    width: '100%',
+    alignItems: 'flex-end',
   },
   modalContent: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     padding: 20,
     borderRadius: 10,
-    width: "80%",
+    width: '80%',
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: '#ccc',
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
-    color:'black'
+    color: 'black',
   },
   button: {
-    backgroundColor: "#2196F3",
+    backgroundColor: '#2196F3',
     paddingVertical: 12,
     borderRadius: 5,
-    alignItems: "center",
+    alignItems: 'center',
     marginBottom: 10,
   },
   buttonText: {
-    color: "#fff",
-    fontWeight: "bold",
+    color: '#fff',
+    fontWeight: 'bold',
   },
   closeIcon: {
     padding: 5,

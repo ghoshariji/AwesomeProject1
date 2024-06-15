@@ -29,6 +29,7 @@ import Admincontact from "./src/adminpage/Admincontact";
 import WatchLecture from "./src/userpage/WatchLecture";
 import Chatlist from "./src/adminpage/Chatlist";
 import Viewpdf from "./src/adminpage/Viewpdf";
+import ChatWithUser from "./src/adminpage/ChatwithUser";
 
 const Stack = createNativeStackNavigator();
 
@@ -201,6 +202,10 @@ export default function App() {
           <Stack.Screen
           name="Pdf View"
           component={Viewpdf}
+        />
+        <Stack.Screen
+          name="Admin Reply"
+          component={ChatWithUser}
           options={{
             headerShown: true,
           }}

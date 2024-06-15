@@ -10,6 +10,7 @@ export const handleLogin1 = async payload => {
 
 export const handleSignup1 = async payload => {
   try {
+    console.log(payload)
     const data = await axios.post('/v1/api/auth/signup', payload);
     return data.data;
   } catch (error) {
@@ -19,7 +20,6 @@ export const handleSignup1 = async payload => {
 
 export const handlePayment1 = async (payload) => {
   try {
-    console.log(payload)
     const data = await axios.post('/v2/api/auth/create-order', payload);
     return data;
   } catch (error) {

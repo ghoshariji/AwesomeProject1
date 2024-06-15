@@ -1,18 +1,46 @@
-import React, {useState} from 'react';
-import {Text, View, TextInput, ScrollView, StyleSheet} from 'react-native';
-
-const Chatlist = () => {
+import React, {useEffect, useState} from 'react';
+import {
+  Text,
+  View,
+  TextInput,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import Loading from '../loader/Loader2';
+import Toast from 'react-native-toast-message';
+import {getAdminChat} from '../api/adminApi';
+const Chatlist = ({navigation}) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [chats, setChats] = useState([
-    {id: '1', name: 'Alice', lastMessage: 'Hey, how are you?'},
-    {id: '2', name: 'Bob', lastMessage: 'Can we meet tomorrow?'},
-    {id: '3', name: 'Charlie', lastMessage: 'What about the project?'},
-    // Add more chats here as needed
-  ]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [oldChat, setOldChat] = useState([]);
 
-  const filteredChats = chats.filter(chat =>
+  const fetchChat = async () => {
+    try {
+      const data = await getAdminChat();
+      setOldChat(data.data);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      Toast.show({
+        type: 'error',
+        text1: 'NetWork Error .... Please Wait',
+      });
+    }
+  };
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetchChat();
+  }, []);
+
+  const filteredChats = oldChat.filter(chat =>
     chat.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
+
+  const handleReply = chat => {
+    navigation.navigate('Admin Reply', {chat});
+  };
 
   return (
     <View style={styles.container}>
@@ -23,12 +51,19 @@ const Chatlist = () => {
         value={searchQuery}
         onChangeText={setSearchQuery}
       />
+
+      {isLoading && <Loading />}
+      <Toast />
       <ScrollView>
         {filteredChats.map(chat => (
-          <View key={chat.id} style={styles.chatItem}>
-            <Text style={styles.chatName}>{chat.name}</Text>
-            <Text style={styles.chatMessage}>{chat.lastMessage}</Text>
-          </View>
+          <TouchableOpacity onPress={() => handleReply(chat)}>
+            <View key={chat._id} style={styles.chatItem}>
+              <Text style={styles.chatName}>{chat.name}</Text>
+              <Text style={styles.chatMessage}>
+                {chat.chat[chat.chat.length - 1].message}
+              </Text>
+            </View>
+          </TouchableOpacity>
         ))}
       </ScrollView>
     </View>

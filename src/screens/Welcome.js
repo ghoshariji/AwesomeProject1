@@ -3,22 +3,33 @@ import React, {useEffect, useState} from 'react';
 import COLORS from '../constants/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Button from '../componets/Button';
-import Toast from 'react-native-toast-message';
-
-import Pdf from 'react-native-pdf';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Welcome = ({navigation}) => {
   const handleLogin = () => {
     setTimeout(() => {
       navigation.navigate('Login');
-    }, 500);
+    }, 300);
   };
 
   const handleSignup = () => {
     setTimeout(() => {
       navigation.navigate('Admindash');
-    }, 500);
+    }, 300);
   };
+
+  useEffect(()=>{
+    const clearStorage = async () => {
+      try {
+        const keys = await AsyncStorage.getAllKeys();
+        if (keys.length > 0) {
+          await AsyncStorage.clear();
+        }
+      } catch (error) {
+      }
+    };
+
+    clearStorage();
+  },[])
   return (
     <SafeAreaView
       style={{

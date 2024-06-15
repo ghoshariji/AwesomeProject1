@@ -11,14 +11,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {fetchUserChat, saveUserChat} from '../api/userApi';
 import Loading from '../loader/Loader2';
 import Toast from 'react-native-toast-message';
-const ChatWithAdmin = () => {
+import { getAdminChatById, saveAdminChat } from '../api/adminApi';
+const ChatWithUser = ({route}) => {
+  const {chat} = route.params;
   const [isLoading, setIsLoading] = useState(false);
   const [message, setNewMessage] = useState('');
   const [oldChat, setOldChat] = useState([]);
   const fetchChat = async () => {
     try {
-      const userId = await AsyncStorage.getItem('token');
-      const data = await fetchUserChat(userId);
+      const data = await getAdminChatById(chat.id);
       setOldChat(data.data);
       setIsLoading(false);
     } catch (error) {
@@ -38,9 +39,8 @@ const ChatWithAdmin = () => {
   const handleSend = async e => {
     e.preventDefault();
     try {
-      const userId = await AsyncStorage.getItem('token');
-      const name = await AsyncStorage.getItem('name');
-      const data = await saveUserChat({userId, message, name});
+      const userId = chat.id
+      const data = await saveAdminChat({userId, message});
       fetchChat();
     } catch (error) {}
   };
@@ -130,4 +130,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChatWithAdmin;
+export default ChatWithUser;

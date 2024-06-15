@@ -6,18 +6,31 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  ToastAndroid
+  ToastAndroid,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import COLORS from '../constants/colors';
 import Button from '../componets/Button';
 import Loader from '../loader/Loader1';
-import Ionicons from 'react-native-vector-icons/Ionicons'; 
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Ionicons1 from 'react-native-vector-icons/AntDesign';
-import { handleSignup1 } from "../api/authApi";
-
+import {handleSignup1} from '../api/authApi';
+import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Signup = ({navigation}) => {
+  useEffect(() => {
+    const clearStorage = async () => {
+      try {
+        const keys = await AsyncStorage.getAllKeys();
+        if (keys.length > 0) {
+          await AsyncStorage.clear();
+        }
+      } catch (error) {}
+    };
+
+    clearStorage();
+  }, []);
   const [loading, setLoading] = useState(false);
   const [post, setPost] = useState({
     name: '',
@@ -33,19 +46,34 @@ const Signup = ({navigation}) => {
 
   const handleSignup = async e => {
     e.preventDefault();
-    setLoading(true)
+    setLoading(true);
     try {
       const data = await handleSignup1(post);
-      if (data.success) {
-        setLoading(false)
-        setTimeout(()=>{
-          navigation.navigate('Login');
-        },800)
-        ToastAndroid.show("Register Successfully",ToastAndroid.SHORT)
+      if (data.statusCode === 201) {
+        Toast.show({
+          type: 'success',
+          text1: data.message,
+        });
+      } else {
+        {
+          Toast.show({
+            type: 'success',
+            text1: data.message,
+          });
+          setTimeout(() => {
+            navigation.navigate('Login');
+          }, 400);
+        }
       }
+      setPost('');
     } catch (error) {
-      setLoading(false)
-      ToastAndroid.show("Something Went Wrong....",ToastAndroid.SHORT)
+      setLoading(false);
+      {
+        Toast.show({
+          type: 'error',
+          text1: 'Network Error ....',
+        });
+      }
     }
   };
 
@@ -72,6 +100,8 @@ const Signup = ({navigation}) => {
               Connect with your future Job!
             </Text>
           </View>
+
+          <Toast />
 
           <View style={{marginBottom: 12}}>
             <Text
@@ -103,7 +133,7 @@ const Signup = ({navigation}) => {
                 keyboardType="default"
                 style={{
                   width: '100%',
-                  color:'black'
+                  color: 'black',
                 }}
               />
             </View>
@@ -139,7 +169,7 @@ const Signup = ({navigation}) => {
                 keyboardType="email-address"
                 style={{
                   width: '100%',
-                  color:'black'
+                  color: 'black',
                 }}
               />
             </View>
@@ -177,7 +207,7 @@ const Signup = ({navigation}) => {
                   borderRightWidth: 1,
                   borderLeftColor: COLORS.grey,
                   height: '100%',
-                  color:'black'
+                  color: 'black',
                 }}
               />
 
@@ -189,7 +219,7 @@ const Signup = ({navigation}) => {
                 keyboardType="numeric"
                 style={{
                   width: '80%',
-                  color:'black'
+                  color: 'black',
                 }}
               />
             </View>
@@ -201,7 +231,7 @@ const Signup = ({navigation}) => {
                 fontSize: 16,
                 fontWeight: 400,
                 marginVertical: 8,
-                color:'black'
+                color: 'black',
               }}>
               Password
             </Text>
@@ -225,6 +255,7 @@ const Signup = ({navigation}) => {
                 secureTextEntry={isPasswordShown}
                 style={{
                   width: '100%',
+                  color: 'black',
                 }}
               />
 
@@ -308,14 +339,14 @@ const Signup = ({navigation}) => {
                 marginRight: 4,
                 borderRadius: 10,
               }}>
-                 <Ionicons1
-              size={20}
-              name="facebook-square"
-              color="blue"
-              style={{
-                marginRight: 8,
-              }}
-            />
+              <Ionicons1
+                size={20}
+                name="facebook-square"
+                color="blue"
+                style={{
+                  marginRight: 8,
+                }}
+              />
               <Text style={{color: COLORS.black}}>Facebook</Text>
             </TouchableOpacity>
 
@@ -332,14 +363,14 @@ const Signup = ({navigation}) => {
                 marginRight: 4,
                 borderRadius: 10,
               }}>
-                <Ionicons1
-              size={20}
-              name="google"
-              color="#34A853"
-              style={{
-                marginRight: 8,
-              }}
-            />
+              <Ionicons1
+                size={20}
+                name="google"
+                color="#34A853"
+                style={{
+                  marginRight: 8,
+                }}
+              />
               <Text style={{color: COLORS.black}}>Google</Text>
             </TouchableOpacity>
           </View>

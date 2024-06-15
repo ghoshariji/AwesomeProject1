@@ -51,3 +51,33 @@ export const verifyPayment = async payload => {
     console.log('Error' + error);
   }
 };
+
+export const getAdminChat = async () => {
+  try {
+    const data = await axios.get('/v1/api/menu/getAdminChat');
+    return data.data;
+  } catch (error) {
+    console.log('Error' + error);
+  }
+};
+
+export const getAdminChatById = async (payload) => {
+  try {
+    const data = await axios.get(`/v1/api/menu/getAdminChatById/?userId=${payload}`);
+    return data.data;
+  } catch (error) {
+    console.log('Error' + error);
+  }
+};
+
+export const saveAdminChat = async (payload) => {
+  try {
+    const data = await axios.post(`/v1/api/menu/saveAdminChat`,payload);
+    return data.data;
+  } catch (error) {
+    console.log('Error' + error);
+  }
+};
+
+
+

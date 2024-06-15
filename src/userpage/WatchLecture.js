@@ -10,6 +10,7 @@ const WatchLecture = ({ lectureUri = "", onClose = () => {} }) => {
   const [duration, setDuration] = useState(0);
   const [showControls, setShowControls] = useState(false);
   const videoRef = useRef(null);
+  console.log(lectureUri)
 
   useEffect(() => {
     Orientation.lockToLandscape();
@@ -52,7 +53,7 @@ const WatchLecture = ({ lectureUri = "", onClose = () => {} }) => {
       {lectureUri ? (
         <Video
           ref={videoRef}
-          source={{ uri: lectureUri }}
+          source={{ uri: `https://academic-server-native.onrender.com/lecture-video/${lectureUri}` }}
           style={styles.video}
           resizeMode="contain"
           paused={paused}

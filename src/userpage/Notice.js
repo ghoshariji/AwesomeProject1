@@ -18,7 +18,7 @@ const Notice = ({navigation}) => {
   const [filteredNoticeData, setFilteredNoticeData] = useState([]);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const handleViewPDF = item => {
-    navigation.navigate("Pdf View")
+    navigation.navigate("Pdf View",{item})
   };
   const [notice, setNotice] = useState([]);
   const handleSearch = () => {
@@ -35,7 +35,6 @@ const Notice = ({navigation}) => {
   const fetch = async () => {
     try {
       const data = await fetchNotice();
-      console.log(data.data.data);
       setNotice(data.data.data);
       setLoading(false);
       setFilteredNoticeData(data.data.data);
@@ -87,12 +86,12 @@ const Notice = ({navigation}) => {
             <TouchableOpacity
               key={item._id}
               style={styles.noticeItem}
-              onPress={() => handleViewPDF(item)}>
+              onPress={() => handleViewPDF(item.notice)}>
               <View style={{flexDirection: 'column'}}>
-                <Text style={styles.date}>{formatDate(item.time)}</Text>
+                <Text style={styles.date}>Date : {formatDate(item.time)}</Text>
               </View>
               <View style={{flexDirection: 'column'}}>
-                <Text style={styles.date}>{item.title}</Text>
+                <Text style={styles.date}>title : {item.title}</Text>
               </View>
               <View style={{flexDirection: 'row'}}>
                 <Ionicons
