@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Pressable,
-  ToastAndroid,
-} from 'react-native';
+import {View, Text, TextInput, TouchableOpacity, Pressable} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import COLORS from '../constants/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -14,12 +7,11 @@ import Ionicons1 from 'react-native-vector-icons/AntDesign';
 import Button from '../componets/Button';
 import {handleLogin1} from '../api/authApi';
 import Loader from '../loader/Loader1';
-import Toast from 'react-native-toast-message';
-import Toast1 from '../toast/toast2';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ToastManager, {Toast} from 'toastify-react-native';
 const Login = ({navigation}) => {
   const [loading, setLoading] = useState(false);
-  const [isPasswordShown, setIsPasswordShown] = useState(false);
+  const [isPasswordShown, setIsPasswordShown] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [post, setPost] = useState({
     email: '',
@@ -44,35 +36,25 @@ const Login = ({navigation}) => {
   const handleInput = (name, value) => {
     setPost({...post, [name]: value});
   };
-  const handleLogin = async e => {
 
+  const handleLogin = async e => {
     setLoading(true);
     e.preventDefault();
     try {
-      // setTimeout(() => {
-      //   navigation.navigate('Userdash');
-      // }, 500);
+      if (!post.email || ![post.password]) {
+        setLoading(false)
+        Toast.error('All Fields Are required ....');
+        return;
+      }
       const data = await handleLogin1(post);
       setLoading(false);
 
       if (data.data.statusCode === 201) {
-        Toast.show({
-          type: 'success',
-          text1: data.data.message,
-          position: 'bottom',
-        });
+        Toast.error(data.data.message);
       } else if (data.data.statusCode === 202) {
-        Toast.show({
-          type: 'success',
-          text1: data.data.message,
-          position: 'bottom',
-        });
+        Toast.error(data.data.message);
       } else {
-        Toast.show({
-          type: 'success',
-          text1: data.data.message,
-          position: 'bottom',
-        });
+        Toast.success(data.data.message);
         AsyncStorage.setItem('name', data.data.user.name);
         AsyncStorage.setItem('email', data.data.user.email);
         AsyncStorage.setItem('phone', data.data.user.phone);
@@ -88,23 +70,17 @@ const Login = ({navigation}) => {
         }
       }
 
-     
       setPost('');
     } catch (error) {
       setLoading(false);
       console.log(error);
-      Toast.show({
-        type: 'error',
-        text1: 'Network Error ....',
-        position: 'bottom',
-      });
+      Toast.error('Network Error ....');
     }
   };
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.white}}>
-      <Toast config={Toast1} />
-
+      <ToastManager />
       <View style={{flex: 1, marginHorizontal: 22}}>
         <View style={{marginVertical: 22}}>
           <Text
@@ -270,7 +246,7 @@ const Login = ({navigation}) => {
             justifyContent: 'center',
           }}>
           <TouchableOpacity
-            onPress={() => console.log('Pressed')}
+            onPress={() => Toast.error("Under Development")}
             style={{
               flex: 1,
               alignItems: 'center',
@@ -299,7 +275,7 @@ const Login = ({navigation}) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => console.log('Pressed')}
+            onPress={() => Toast.error("Under Development")}
             style={{
               flex: 1,
               alignItems: 'center',

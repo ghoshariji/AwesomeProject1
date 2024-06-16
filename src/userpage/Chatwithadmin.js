@@ -20,6 +20,7 @@ const ChatWithAdmin = () => {
       const userId = await AsyncStorage.getItem('token');
       const data = await fetchUserChat(userId);
       setOldChat(data.data);
+      console.log(data)
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -50,9 +51,9 @@ const ChatWithAdmin = () => {
       {isLoading && <Loading />}
       <Toast />
       <ScrollView style={styles.messagesContainer}>
-        {oldChat.map(message => (
+        {oldChat.length > 0 ? oldChat.map((message,index) => (
           <View
-            key={message.id}
+            key={index}
             style={[
               styles.messageBubble,
               message.sender === 'admin'
@@ -61,7 +62,10 @@ const ChatWithAdmin = () => {
             ]}>
             <Text style={styles.messageText}>{message.message}</Text>
           </View>
-        ))}
+        )) :(<Text style={{justifyContent:'center',color:'black'}}> Create New Chat</Text>)
+      
+      
+      }
       </ScrollView>
       <View style={styles.inputContainer}>
         <TextInput
@@ -95,7 +99,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   adminBubble: {
-    backgroundColor: 'blue',
+    backgroundColor: '#5794f7',
     alignSelf: 'flex-start',
   },
   userBubble: {

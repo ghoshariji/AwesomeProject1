@@ -4,17 +4,18 @@ import COLORS from '../constants/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Button from '../componets/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const Welcome = ({navigation}) => {
   const handleLogin = () => {
     setTimeout(() => {
       navigation.navigate('Login');
-    }, 300);
+    }, 200);
   };
 
   const handleSignup = () => {
     setTimeout(() => {
       navigation.navigate('Admindash');
-    }, 300);
+    }, 200);
   };
 
   useEffect(()=>{
@@ -30,12 +31,16 @@ const Welcome = ({navigation}) => {
 
     clearStorage();
   },[])
+
+
   return (
     <SafeAreaView
       style={{
         flex: 1,
         backgroundColor: 'black',
       }}>
+
+
       <View style={{flex: 1}}>
         <View>
           <Image

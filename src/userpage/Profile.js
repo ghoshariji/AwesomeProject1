@@ -93,7 +93,7 @@ const Profile = ({navigation}) => {
             source={
               profileImage
                 ? {uri: profileImage}
-                : require('../assets/welcome.jpg')
+                : require('../assets/baa-profile.jpeg')
             }
             style={styles.profileImage}
           />

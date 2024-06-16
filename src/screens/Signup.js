@@ -8,7 +8,7 @@ import {
   ScrollView,
   ToastAndroid,
 } from 'react-native';
-import React, {useState,useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import COLORS from '../constants/colors';
 import Button from '../componets/Button';
@@ -16,7 +16,7 @@ import Loader from '../loader/Loader1';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Ionicons1 from 'react-native-vector-icons/AntDesign';
 import {handleSignup1} from '../api/authApi';
-import Toast from 'react-native-toast-message';
+import ToastManager, {Toast} from 'toastify-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const Signup = ({navigation}) => {
   useEffect(() => {
@@ -42,37 +42,33 @@ const Signup = ({navigation}) => {
     setPost({...post, [name]: value});
   };
   const [errorMessage, setErrorMessage] = useState('');
-  const [isPasswordShown, setIsPasswordShown] = useState(false);
+  const [isPasswordShown, setIsPasswordShown] = useState(true);
 
   const handleSignup = async e => {
     e.preventDefault();
     setLoading(true);
     try {
+      if (!post.name || !post.email || !post.password || !post.phone) {
+        Toast.error('All Fields Are required ....');
+        setLoading(false);
+        return;
+      }
       const data = await handleSignup1(post);
       if (data.statusCode === 201) {
-        Toast.show({
-          type: 'success',
-          text1: data.message,
-        });
+        Toast.error(data.message);
       } else {
         {
-          Toast.show({
-            type: 'success',
-            text1: data.message,
-          });
+          setPost('');
+          Toast.success(data.message);
           setTimeout(() => {
             navigation.navigate('Login');
-          }, 400);
+          }, 200);
         }
       }
-      setPost('');
     } catch (error) {
       setLoading(false);
       {
-        Toast.show({
-          type: 'error',
-          text1: 'Network Error ....',
-        });
+        Toast.error('Network Error ....');
       }
     }
   };
@@ -91,6 +87,7 @@ const Signup = ({navigation}) => {
               }}>
               Create Account 👍
             </Text>
+            <ToastManager />
 
             <Text
               style={{
@@ -100,8 +97,6 @@ const Signup = ({navigation}) => {
               Connect with your future Job!
             </Text>
           </View>
-
-          <Toast />
 
           <View style={{marginBottom: 12}}>
             <Text
@@ -327,7 +322,7 @@ const Signup = ({navigation}) => {
               justifyContent: 'center',
             }}>
             <TouchableOpacity
-              onPress={() => console.log('Pressed')}
+              onPress={() => Toast.error("Under Development")}
               style={{
                 flex: 1,
                 alignItems: 'center',
@@ -351,7 +346,7 @@ const Signup = ({navigation}) => {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => console.log('Pressed')}
+              onPress={() => Toast.error("Under Development")}
               style={{
                 flex: 1,
                 alignItems: 'center',
