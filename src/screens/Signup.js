@@ -41,7 +41,6 @@ const Signup = ({navigation}) => {
   const handleInput = (name, value) => {
     setPost({...post, [name]: value});
   };
-  const [errorMessage, setErrorMessage] = useState('');
   const [isPasswordShown, setIsPasswordShown] = useState(true);
 
   const handleSignup = async e => {
@@ -82,10 +81,10 @@ const Signup = ({navigation}) => {
               style={{
                 fontSize: 22,
                 fontWeight: 'bold',
-                marginVertical: 12,
+                marginVertical: 7,
                 color: COLORS.black,
               }}>
-              Create Account 👍
+              Create Your Account 👍
             </Text>
             <ToastManager />
 
@@ -103,10 +102,10 @@ const Signup = ({navigation}) => {
               style={{
                 fontSize: 16,
                 fontWeight: 400,
-                marginVertical: 8,
+                marginVertical: 5,
                 color: COLORS.black,
               }}>
-              Name
+              Enter Name
             </Text>
 
             <View
@@ -196,7 +195,7 @@ const Signup = ({navigation}) => {
               <TextInput
                 placeholder="+91"
                 placeholderTextColor={COLORS.black}
-                keyboardType="numeric"
+                editable={false}
                 style={{
                   width: '12%',
                   borderRightWidth: 1,
@@ -269,16 +268,13 @@ const Signup = ({navigation}) => {
             </View>
           </View>
 
+          {loading ? <Loader /> : null}
+
           <View
             style={{
               flexDirection: 'row',
               marginVertical: 6,
             }}></View>
-          {errorMessage && (
-            <Text style={{marginLeft: 25, color: 'red', marginBottom: 12}}>
-              {errorMessage}
-            </Text>
-          )}
           <Button
             title="Sign Up"
             onPress={handleSignup}
@@ -322,7 +318,7 @@ const Signup = ({navigation}) => {
               justifyContent: 'center',
             }}>
             <TouchableOpacity
-              onPress={() => Toast.error("Under Development")}
+              onPress={() => Toast.error('Under Development')}
               style={{
                 flex: 1,
                 alignItems: 'center',
@@ -346,7 +342,7 @@ const Signup = ({navigation}) => {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => Toast.error("Under Development")}
+              onPress={() => Toast.error('Under Development')}
               style={{
                 flex: 1,
                 alignItems: 'center',

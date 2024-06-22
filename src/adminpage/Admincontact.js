@@ -97,7 +97,7 @@ const Admincontact = () => {
       <FlatList
         data={filteredContacts}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item._id}
         style={styles.list}
       />
     </View>

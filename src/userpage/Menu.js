@@ -104,9 +104,9 @@ const Menu = ({ navigation }) => {
               color="black"
               style={styles.icon}
             />
-            <Text style={styles.sectionTitle}>Resource</Text>
+            <Text style={styles.sectionTitle} onPress={()=>navigation.navigate("Resource")}>Resource</Text>
             <View style={styles.arrowContainer}>
-              <TouchableOpacity onPress={goToExaminationProgress}>
+              <TouchableOpacity  onPress={()=>navigation.navigate("Resource")}>
                 <Ionicons
                   name="chevron-forward-outline"
                   size={24}
@@ -185,9 +185,10 @@ const Menu = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: "#e0e0e0", // Grey background color
-    paddingTop: 10, // Adjusted top padding to provide space for the header
-    paddingHorizontal: 20, // Add horizontal padding to the container
+    backgroundColor: "#e0e0e0", 
+    paddingTop: 10, 
+    paddingHorizontal: 20,
+    marginBottom:20
   },
   section: {
     backgroundColor: "#fff", // White background color

@@ -55,9 +55,9 @@ const Chatlist = ({navigation}) => {
       {isLoading && <Loading />}
       <Toast />
       <ScrollView>
-        {filteredChats.map(chat => (
-          <TouchableOpacity onPress={() => handleReply(chat)}>
-            <View key={chat._id} style={styles.chatItem}>
+        {filteredChats.map((chat,index) => (
+          <TouchableOpacity key={index} onPress={() => handleReply(chat)}>
+            <View  style={styles.chatItem}>
               <Text style={styles.chatName}>{chat.name}</Text>
               <Text style={styles.chatMessage}>
                 {chat.chat[chat.chat.length - 1].message}

@@ -16,7 +16,7 @@ import Ionicons1 from 'react-native-vector-icons/MaterialIcons';
 import Ionicons2 from 'react-native-vector-icons/Fontisto';
 import Ionicons3 from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Toast from 'react-native-toast-message';
+import ToastManager,{Toast} from 'toastify-react-native';
 
 const Profile = ({navigation}) => {
   const [changeNameModalVisible, setChangeNameModalVisible] = useState(false);
@@ -66,10 +66,7 @@ const Profile = ({navigation}) => {
 
   const handleLogout = async () => {
     await AsyncStorage.clear();
-    Toast.show({
-      type: 'success',
-      text1: 'Logout Successfully',
-    });
+    Toast.success('Logout Successfully');
     setTimeout(() => {
       navigation.navigate('Login');
     }, 500);
@@ -85,9 +82,9 @@ const Profile = ({navigation}) => {
   }, []);
   return (
     <SafeAreaView style={styles.container}>
+         <ToastManager />
       <View style={styles.topSection}>
         {/* Profile Image */}
-        <Toast />
         <TouchableOpacity onPress={handleChangeProfilePic}>
           <Image
             source={
@@ -137,6 +134,8 @@ const Profile = ({navigation}) => {
           <Ionicons3 name="logout" color="red" size={22} />
           <Text style={{color: 'black', marginLeft: 33}}>Log out</Text>
         </TouchableOpacity>
+
+     
       </ScrollView>
 
       <Modal

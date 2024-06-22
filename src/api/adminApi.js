@@ -79,5 +79,14 @@ export const saveAdminChat = async (payload) => {
   }
 };
 
+export const enrollStudentToCourse = async (payload) => {
+  try {
+    console.log(payload)
+    const data = await axios.post(`/v1/api/course/add-student-course`,payload);
+    return data.data;
+  } catch (error) {
+    console.log('Error' + error);
+  }
+};
 
 

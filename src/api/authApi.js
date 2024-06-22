@@ -25,3 +25,18 @@ export const handlePayment1 = async (payload) => {
     console.log('Error ' + error);
   }
 };
+
+
+export const validateTokenUser = async payload => {
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${payload}`,
+      },
+    };
+    const data = await axios.get('/v1/api/auth/validateToken', config);
+    return data.data;
+  } catch (error) {
+    console.log('Error ' + error);
+  }
+};

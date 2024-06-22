@@ -10,145 +10,207 @@ import {
   TouchableOpacity,
   openLink,
   Linking,
+  ActivityIndicator,
+  Modal,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Ionicons1 from 'react-native-vector-icons/AntDesign';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Button from '../componets/Button';
 import COLORS from '../constants/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
-
+import ToastManager, {Toast} from 'toastify-react-native';
+import Ionicons2 from 'react-native-vector-icons/AntDesign';
+import Ionicons12 from 'react-native-vector-icons/Entypo';
+import FastImage from 'react-native-fast-image';
 const Homeuser = ({navigation}) => {
   const openLink = url => {
     Linking.openURL(url);
   };
-
-  const [name,setName] = useState('')
-
+  const [name, setName] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
   const callNumber = phoneNumber => {
     Linking.openURL(`tel:${phoneNumber}`);
   };
-
-  useEffect(()=>{
-    setName(AsyncStorage.getItem('name'))
-  },[])
+  useEffect(() => {
+    setName(AsyncStorage.getItem('name'));
+    setModalVisible(true);
+  }, []);
   const youtubeVideos = [
-      {
-        id: 'VIDEO_ID_3',
-        title: 'WBCS 24 ব্যাচে G.I. ক্লাস চলছে ......',
-        thumbnail:
-        require("../assets/baa=class3.png"),
-        embedUrl:
-          'https://www.youtube.com/watch?v=pTRkV_Rl21Q&ab_channel=BarasatAcademicAssociation',
-      },
-      {
-        id: 'VIDEO_ID_4',
-        title: 'WBCS -24 ব্যাচে ইকোনমিক্স ক্লাস চলছে ...',
-        thumbnail:
-        require("../assets/baa-class4.png"),
-        embedUrl:
-          'https://www.youtube.com/watch?v=Wd0wR7NMXQQ&ab_channel=BarasatAcademicAssociation',
-      },
-      {
+    {
+      id: 'VIDEO_ID_3',
+      title: 'WBCS 24 ব্যাচে G.I. ক্লাস চলছে ......',
+      thumbnail: require('../assets/baa=class3.png'),
+      embedUrl:
+        'https://www.youtube.com/watch?v=pTRkV_Rl21Q&ab_channel=BarasatAcademicAssociation',
+    },
+    {
+      id: 'VIDEO_ID_4',
+      title: 'WBCS -24 ব্যাচে ইকোনমিক্স ক্লাস চলছে ...',
+      thumbnail: require('../assets/baa-class4.png'),
+      embedUrl:
+        'https://www.youtube.com/watch?v=Wd0wR7NMXQQ&ab_channel=BarasatAcademicAssociation',
+    },
+    {
       id: 'VIDEO_ID_1',
       title: 'CGL/CHSL/MTS-24 ব্যাচে ম্যাথ ক্লাস চলছে ......',
-      thumbnail:
-        require("../assets/baa-class1.png"),
+      thumbnail: require('../assets/baa-class1.png'),
       embedUrl:
         'https://www.youtube.com/watch?v=5uyi385gkxY&ab_channel=BarasatAcademicAssociation',
     },
     {
       id: 'VIDEO_ID_2',
       title: 'POLICE-24 ব্যাচে ম্যাথ ক্লাস চলছে ...',
-      thumbnail:
-      require("../assets/baa-class2.png"),
+      thumbnail: require('../assets/baa-class2.png'),
       embedUrl:
         'https://www.youtube.com/watch?v=fs8qoeNNwyA&ab_channel=BarasatAcademicAssociation',
     },
     {
       id: 'VIDEO_ID_5',
       title: 'CLERKSHIP -24 ব্যাচে ম্যাথেমেটিক্স ক্লাস চলছে.',
-      thumbnail:
-      require("../assets/baa-class5.png"),
+      thumbnail: require('../assets/baa-class5.png'),
       embedUrl:
         'https://www.youtube.com/watch?v=dlM2TT9Wd5Y&ab_channel=BarasatAcademicAssociation',
     },
     // Add more YouTube video IDs here
   ];
-
-  const [currentVideo, setCurrentVideo] = useState(null);
-
-  // Function to play the video
-  const playVideo = videoId => {
-    setCurrentVideo(videoId);
+  const closeModal = () => {
+    setModalVisible(false);
   };
+  const [currentVideo, setCurrentVideo] = useState(null);
   const openYoutube = videoId => {
-    // const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
     Linking.openURL(videoId);
+  };
+  const openWhatsApp = () => {
+    const phoneNumber = '+917439120030';
+    const url = `whatsapp://send?phone=${phoneNumber}`;
+    Linking.openURL(url).catch(() => {
+      Toast.success('Make sure whatapp Installed');
+    });
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <Ionicons name="home" size={24} color="black" /> */}
-
       {/* Header */}
       <View style={styles.header}>
-        {/* Profile Section */}
         <View style={styles.profileSection}>
-          <Image
+          <FastImage
+            priority={FastImage.priority.normal}
+            resizeMode={FastImage.resizeMode.contain}
             source={require('../assets/baa-profile.jpeg')}
             style={styles.profileImage}
           />
           <Text style={styles.profileName}>Hey, {name}</Text>
         </View>
-        {/* Settings Icon */}
+
+        <Pressable onPress={openWhatsApp} style={styles.icon}>
+          <Ionicons name="logo-whatsapp" size={28} color="green" />
+        </Pressable>
         <Pressable onPress={() => navigation.navigate('Profileuser')}>
-          <Ionicons name="settings-outline" size={28} color="black" />
+          <Ionicons name="settings-outline" size={28} color="#a86369" />
         </Pressable>
       </View>
+
+      <ToastManager />
+
+      {/* modal pop-up */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          closeModal();
+        }}>
+        <View style={styles.modalContainer}>
+          <TouchableOpacity
+            onPress={closeModal}
+            style={{
+              alignSelf: 'flex-end',
+              marginBottom: 1,
+              marginRight: 20,
+            }}>
+            <Ionicons12 name="circle-with-cross" color="red" size={30} />
+          </TouchableOpacity>
+          <View style={styles.modalContent}>
+            <FastImage
+              priority={FastImage.priority.normal}
+              resizeMode={FastImage.resizeMode.contain}
+              source={require('../assets/baa13.jpg')}
+              style={styles.offerImage}
+              resizeMode="stretch"
+              PlaceholderContent={<ActivityIndicator color="black" />}
+            />
+          </View>
+        </View>
+      </Modal>
 
       {/* Content */}
       <ScrollView style={styles.content}>
         {/* Institution Picture Slider Section */}
         <View style={styles.section}>
           <ScrollView horizontal={true}>
-            <Image
+            <FastImage
+              priority={FastImage.priority.normal}
+              resizeMode={FastImage.resizeMode.contain}
               source={require('../assets/baa1.jpg')}
               style={styles.institutionImage}
+              PlaceholderContent={<ActivityIndicator color="black" />}
             />
-            <Image
+            <FastImage
+              priority={FastImage.priority.normal}
+              resizeMode={FastImage.resizeMode.contain}
               source={require('../assets/baa.jpg')}
               style={styles.institutionImage}
+              PlaceholderContent={<ActivityIndicator color="black" />}
             />
-            <Image
+            <FastImage
+              priority={FastImage.priority.normal}
+              resizeMode={FastImage.resizeMode.contain}
               source={require('../assets/baa15.jpg')}
               style={styles.institutionImage}
+              PlaceholderContent={<ActivityIndicator color="black" />}
             />
-            <Image
+            <FastImage
+              priority={FastImage.priority.normal}
+              resizeMode={FastImage.resizeMode.contain}
               source={require('../assets/baa14.jpg')}
               style={styles.institutionImage}
+              PlaceholderContent={<ActivityIndicator color="black" />}
             />
-            <Image
+            <FastImage
+              priority={FastImage.priority.normal}
+              resizeMode={FastImage.resizeMode.contain}
               source={require('../assets/baa6.jpg')}
               style={styles.institutionImage}
+              PlaceholderContent={<ActivityIndicator color="black" />}
             />
             {/* Add more institution images here */}
           </ScrollView>
         </View>
+
+        {/* #coming soon */}
         <View style={styles.specialOffer}>
-          <Text style={styles.sectionTitle}>#Coming Soon</Text>
-          <Image
+          <View style={styles.specialOffer1}>
+            <Text style={styles.specialOfferText}>#Coming Soon</Text>
+            <Ionicons2
+              name="pushpin"
+              size={30}
+              color="#f20c18"
+              style={{marginLeft: 8}}
+            />
+          </View>
+          <FastImage
+            priority={FastImage.priority.normal}
+            resizeMode={FastImage.resizeMode.contain}
             source={require('../assets/baa-native2.jpg')}
             style={styles.specialOfferImage}
+            PlaceholderContent={<ActivityIndicator color="black" />}
           />
         </View>
 
         {/* free course */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>
-            Free courses available on YouTube
+            Courses also available on YouTube
           </Text>
           <ScrollView horizontal={true}>
             {youtubeVideos.map((video, index) => (
@@ -166,9 +228,12 @@ const Homeuser = ({navigation}) => {
                     />
                   ) : (
                     <>
-                      <Image
+                      <FastImage
+                        priority={FastImage.priority.normal}
+                        resizeMode={FastImage.resizeMode.contain}
                         source={video.thumbnail}
                         style={styles.thumbnail}
+                        PlaceholderContent={<ActivityIndicator color="black" />}
                       />
                       <Text style={styles.videoTitle}>{video.title}</Text>
                     </>
@@ -185,9 +250,12 @@ const Homeuser = ({navigation}) => {
           <ScrollView horizontal={true}>
             {/* Course Card 1 */}
             <View style={styles.courseCard}>
-              <Image
+              <FastImage
+                priority={FastImage.priority.normal}
+                resizeMode={FastImage.resizeMode.contain}
                 source={require('../assets/welcome.jpg')}
                 style={styles.courseImage}
+                PlaceholderContent={<ActivityIndicator color="black" />}
               />
               <Text style={styles.courseTitle}>Course Title</Text>
               <View style={styles.priceContainer}>
@@ -200,7 +268,7 @@ const Homeuser = ({navigation}) => {
               <Button
                 title="Buy now"
                 filled
-                onPress={()=>navigation.navigate("Course")}
+                onPress={() => navigation.navigate('Course')}
                 style={{
                   marginTop: 15,
                   width: '100%',
@@ -211,7 +279,9 @@ const Homeuser = ({navigation}) => {
               />
             </View>
             <View style={styles.courseCard}>
-              <Image
+              <FastImage
+                priority={FastImage.priority.normal}
+                resizeMode={FastImage.resizeMode.contain}
                 source={require('../assets/welcome.jpg')}
                 style={styles.courseImage}
               />
@@ -226,7 +296,7 @@ const Homeuser = ({navigation}) => {
               <Button
                 title="Buy now"
                 filled
-                onPress={()=>navigation.navigate("Course")}
+                onPress={() => navigation.navigate('Course')}
                 style={{
                   marginTop: 15,
                   width: '100%',
@@ -237,7 +307,9 @@ const Homeuser = ({navigation}) => {
               />
             </View>
             <View style={styles.courseCard}>
-              <Image
+              <FastImage
+                priority={FastImage.priority.normal}
+                resizeMode={FastImage.resizeMode.contain}
                 source={require('../assets/welcome.jpg')}
                 style={styles.courseImage}
               />
@@ -252,7 +324,7 @@ const Homeuser = ({navigation}) => {
               <Button
                 title="Buy now"
                 filled
-                onPress={()=>navigation.navigate("Course")}
+                onPress={() => navigation.navigate('Course')}
                 style={{
                   marginTop: 15,
                   width: '100%',
@@ -263,7 +335,9 @@ const Homeuser = ({navigation}) => {
               />
             </View>
             <View style={styles.courseCard}>
-              <Image
+              <FastImage
+                priority={FastImage.priority.normal}
+                resizeMode={FastImage.resizeMode.contain}
                 source={require('../assets/welcome.jpg')}
                 style={styles.courseImage}
               />
@@ -278,7 +352,7 @@ const Homeuser = ({navigation}) => {
               <Button
                 title="Buy now"
                 filled
-                onPress={()=>navigation.navigate("Course")}
+                onPress={() => navigation.navigate('Course')}
                 style={{
                   marginTop: 15,
                   width: '100%',
@@ -289,7 +363,9 @@ const Homeuser = ({navigation}) => {
               />
             </View>
             <View style={styles.courseCard}>
-              <Image
+              <FastImage
+                priority={FastImage.priority.normal}
+                resizeMode={FastImage.resizeMode.contain}
                 source={require('../assets/welcome.jpg')}
                 style={styles.courseImage}
               />
@@ -304,7 +380,7 @@ const Homeuser = ({navigation}) => {
               <Button
                 title="Buy now"
                 filled
-                onPress={()=>navigation.navigate("Course")}
+                onPress={() => navigation.navigate('Course')}
                 style={{
                   marginTop: 15,
                   width: '100%',
@@ -321,25 +397,40 @@ const Homeuser = ({navigation}) => {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Our Gallaries</Text>
           <ScrollView horizontal={true}>
-            <Image
+            <FastImage
+              priority={FastImage.priority.normal}
+              resizeMode={FastImage.resizeMode.contain}
               source={require('../assets/baa2.jpg')}
               style={styles.institutionImage1}
+              PlaceholderContent={<ActivityIndicator color="black" />}
             />
-            <Image
+            <FastImage
+              priority={FastImage.priority.normal}
+              resizeMode={FastImage.resizeMode.contain}
               source={require('../assets/baa7.jpg')}
               style={styles.institutionImage1}
+              PlaceholderContent={<ActivityIndicator color="black" />}
             />
-            <Image
+            <FastImage
+              priority={FastImage.priority.normal}
+              resizeMode={FastImage.resizeMode.contain}
               source={require('../assets/baa13.jpg')}
               style={styles.institutionImage1}
+              PlaceholderContent={<ActivityIndicator color="black" />}
             />
-            <Image
+            <FastImage
+              priority={FastImage.priority.normal}
+              resizeMode={FastImage.resizeMode.contain}
               source={require('../assets/baa4.jpg')}
               style={styles.institutionImage1}
+              PlaceholderContent={<ActivityIndicator color="black" />}
             />
-            <Image
+            <FastImage
+              priority={FastImage.priority.normal}
+              resizeMode={FastImage.resizeMode.contain}
               source={require('../assets/welcome.jpg')}
               style={styles.institutionImage1}
+              PlaceholderContent={<ActivityIndicator color="black" />}
             />
             {/* Add more institution images here */}
           </ScrollView>
@@ -425,9 +516,12 @@ const Homeuser = ({navigation}) => {
 
             {/* Right Section */}
             <View style={styles.rightSection}>
-              <Image
+              <FastImage
+                priority={FastImage.priority.normal}
+                resizeMode={FastImage.resizeMode.contain}
                 source={require('../assets/baa-call.png')}
-                style={styles.circularImage} // Updated style here
+                style={styles.circularImage}
+                PlaceholderContent={<ActivityIndicator color="black" />} // Updated style here
               />
             </View>
           </View>
@@ -447,22 +541,45 @@ const Homeuser = ({navigation}) => {
           </View>
         </View>
 
+        <View style={styles.headerTextFooter}>
+          <Text style={styles.contactText1}>Why BAA ?</Text>
+          <Text style={styles.contactText}>
+            Barasat Academic Association is a house of all competitive Exams
+            coaching centre at Barasat, North 24 Parganas.We provide coaching in
+            WBCS, Police, Combined, Rail, Primary TET, SSC-TET and also Mock
+            Interview and Mock test of various Govt Exams.
+          </Text>
+        </View>
+
         <View style={styles.footer}>
           <View style={{justifyContent: 'space-between'}}>
+            <Text style={styles.contactText2}>connect us. through</Text>
             <View style={styles.socialLinks}>
               <TouchableOpacity
                 style={{padding: 8}}
-                onPress={() => openLink('https://www.youtube.com/@BarasatAcademicAssociation')}>
+                onPress={() =>
+                  openLink(
+                    'https://www.youtube.com/@BarasatAcademicAssociation',
+                  )
+                }>
                 <Icon name="youtube" size={24} color="white" />
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => openLink('https://www.youtube.com/@BarasatAcademicAssociation')}
+                onPress={() =>
+                  openLink(
+                    'https://www.youtube.com/@BarasatAcademicAssociation',
+                  )
+                }
                 style={{padding: 8}}>
                 <Icon name="telegram" size={24} color="white" />
               </TouchableOpacity>
               <TouchableOpacity
                 style={{padding: 8}}
-                onPress={() => openLink('https://www.youtube.com/@BarasatAcademicAssociation')}>
+                onPress={() =>
+                  openLink(
+                    'https://www.youtube.com/@BarasatAcademicAssociation',
+                  )
+                }>
                 <Icon name="instagram" size={24} color="white" />
               </TouchableOpacity>
             </View>
@@ -478,14 +595,41 @@ const Homeuser = ({navigation}) => {
           </View>
         </View>
 
-        <View style={styles.headerTextFooter}>
-          <Text style={styles.contactText1}>Why BAA ?</Text>
-          <Text style={styles.contactText}>
-            Barasat Academic Association is a house of all competitive Exams
-            coaching centre at Barasat, North 24 Parganas.We provide coaching in
-            WBCS, Police, Combined, Rail, Primary TET, SSC-TET and also Mock
-            Interview and Mock test of various Govt Exams.
+        <View style={styles.headerTextFooter1}>
+          <Text style={styles.contactText3}>Dream big and dare to fail.</Text>
+
+          <Text
+            style={{
+              textAlign: 'center',
+              color: 'black',
+              fontWeight: 'bold',
+              fontSize: 22,
+            }}>
+            – Norman Vaughan
           </Text>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 1,
+            }}>
+            <Ionicons name="remove-outline" color="black" size={60} />
+            <Ionicons name="remove-outline" color="black" size={60} />
+            <Ionicons name="remove-outline" color="black" size={60} />
+            <Ionicons name="remove-outline" color="black" size={60} />
+          </View>
+
+          <View style={styles.appInfoContainer}>
+            <Text
+              style={{textAlign: 'center', color: 'black', fontWeight: 'bold'}}>
+              Powered by
+            </Text>
+            <Text style={styles.appInfoText}>
+              version: 1.0.0 | contact@example.com
+            </Text>
+          </View>
         </View>
       </ScrollView>
 
@@ -499,6 +643,22 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  icon: {
+    marginHorizontal: 4,
+    marginLeft: 60,
+  },
+  appInfoContainer: {
+    padding: 16,
+    borderRadius: 10,
+    marginTop: 1,
+  },
+  appInfoText: {
+    fontSize: 14,
+    marginBottom: 10,
+    color: '#333',
+    textAlign: 'center',
+  },
+
   section: {
     paddingHorizontal: 20,
     marginBottom: 20,
@@ -517,6 +677,40 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: 'black',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  offerImage: {
+    width: 250,
+    height: 200,
+    borderRadius: 10,
+    marginBottom: 2,
+  },
+  closeButton: {
+    marginTop: 10,
+    fontSize: 16,
+    color: 'blue',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   webView: {
     width: 160,
@@ -572,7 +766,7 @@ const styles = StyleSheet.create({
     borderRadius: 75,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop:50
+    marginTop: 50,
   },
 
   header: {
@@ -629,6 +823,22 @@ const styles = StyleSheet.create({
   specialOffer: {
     paddingHorizontal: 20,
     marginBottom: 20,
+  },
+  specialOffer1: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  sectionTitle1: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: 'black',
+  },
+  specialOfferText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#321fdb',
   },
   specialOfferImage: {
     width: '100%',
@@ -716,6 +926,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: 'black',
+    margin: 10,
+    borderRadius: 10,
   },
   footerText: {
     fontSize: 14,
@@ -724,14 +936,28 @@ const styles = StyleSheet.create({
   contactInfo: {
     flexDirection: 'column',
     alignItems: 'flex-start',
+    borderRadius: 10,
+    textAlign: 'justify',
   },
   contactText: {
     fontSize: 14,
     marginBottom: 5,
     color: 'white',
   },
+  contactText3: {
+    fontSize: 18,
+    marginBottom: 5,
+    color: 'black',
+    textAlign: 'center',
+    marginTop: 15,
+  },
   contactText1: {
     fontSize: 20,
+    marginBottom: 5,
+    color: 'white',
+  },
+  contactText2: {
+    fontSize: 13,
     marginBottom: 5,
     color: 'white',
   },
@@ -746,8 +972,16 @@ const styles = StyleSheet.create({
     marginRight: 20, // Add some right margin to the container
   },
   headerTextFooter: {
-    backgroundColor: 'black',
+    backgroundColor: '#A6AFA1',
+    padding: 10,
+    margin: 10,
+    textAlign: 'justify',
+    borderRadius: 10,
+  },
+  headerTextFooter1: {
+    backgroundColor: 'white',
     padding: 8,
+    marginBottom: 60,
   },
 });
 

@@ -30,10 +30,17 @@ import WatchLecture from "./src/userpage/WatchLecture";
 import Chatlist from "./src/adminpage/Chatlist";
 import Viewpdf from "./src/adminpage/Viewpdf";
 import ChatWithUser from "./src/adminpage/ChatwithUser";
+import Resource from "./src/userpage/Resource";
+import Periods from "./src/userpage/Periods";
+import { useEffect } from "react";
+import Lecture from "./src/userpage/Lecture";
+import Accessdenied from "./src/screens/Accessdenied";
+
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+
   return (
     <View style={styles.container}>
     <NavigationContainer>
@@ -72,9 +79,6 @@ export default function App() {
        <Stack.Screen
           name="Contact"
           component={Contact}
-          options={{
-            headerShown: true,
-          }}
         />
         <Stack.Screen
           name="My course"
@@ -209,6 +213,31 @@ export default function App() {
           options={{
             headerShown: true,
           }}
+        />
+         <Stack.Screen
+          name="Resource"
+          component={Resource}
+          options={{
+            headerShown: true,
+          }}
+        />
+           <Stack.Screen
+          name="Schedule"
+          component={Periods}
+          options={{
+            headerShown: true,
+          }}
+        />
+        <Stack.Screen
+          name="Lecture"
+          component={Lecture}
+          options={{
+            headerShown: true,
+          }}
+        />
+        <Stack.Screen
+          name="Access"
+          component={Accessdenied}
         />
       </Stack.Navigator>
     </NavigationContainer>

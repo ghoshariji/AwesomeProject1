@@ -1,15 +1,35 @@
-import {View, Text, Pressable, Image, ActivityIndicator} from 'react-native';
+import {
+  View,
+  Text,
+  Pressable,
+  ActivityIndicator,
+  StyleSheet,
+  Modal,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import COLORS from '../constants/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Button from '../componets/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Ionicons from 'react-native-vector-icons/Entypo';
+import SplashScreen from "react-native-splash-screen";
+import FastImage from 'react-native-fast-image'
 
 const Welcome = ({navigation}) => {
   const handleLogin = () => {
     setTimeout(() => {
       navigation.navigate('Login');
     }, 200);
+  };
+  const [modalVisible, setModalVisible] = useState(false);
+
+  useEffect(() => {
+    setModalVisible(true);
+  }, []);
+
+  const closeModal = () => {
+    setModalVisible(false);
   };
 
   const handleSignup = () => {
@@ -18,20 +38,22 @@ const Welcome = ({navigation}) => {
     }, 200);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     const clearStorage = async () => {
       try {
         const keys = await AsyncStorage.getAllKeys();
         if (keys.length > 0) {
           await AsyncStorage.clear();
         }
-      } catch (error) {
-      }
+      } catch (error) {}
     };
 
     clearStorage();
-  },[])
+  }, []);
 
+  useEffect(()=>{
+    SplashScreen.hide();
+  },[])
 
   return (
     <SafeAreaView
@@ -39,11 +61,9 @@ const Welcome = ({navigation}) => {
         flex: 1,
         backgroundColor: 'black',
       }}>
-
-
       <View style={{flex: 1}}>
         <View>
-          <Image
+          <FastImage
             source={require('../assets/welcome1.jpg')}
             style={{
               height: 100,
@@ -57,9 +77,41 @@ const Welcome = ({navigation}) => {
                 {rotate: '-15deg'},
               ],
             }}
+            priority={FastImage.priority.normal}
+            resizeMode={FastImage.resizeMode.contain}
           />
 
-          <Image
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              closeModal();
+            }}>
+            <View style={styles.modalContainer}>
+              <TouchableOpacity
+                onPress={closeModal}
+                style={{
+                  alignSelf: 'flex-end',
+                  marginBottom: 1,
+                  marginRight: 20,
+                }}>
+                <Ionicons name="circle-with-cross" color="red" size={30} />
+              </TouchableOpacity>
+              <View style={styles.modalContent}>
+                <FastImage
+                  source={require('../assets/baa13.jpg')}
+                  style={styles.offerImage}
+                  priority={FastImage.priority.normal}
+                  resizeMode={FastImage.resizeMode.contain}
+                  //resizeMode="stretch"
+                  PlaceholderContent={<ActivityIndicator />}
+                />
+              </View>
+            </View>
+          </Modal>
+
+          <FastImage
             source={require('../assets/welcome1.jpg')}
             style={{
               height: 100,
@@ -74,9 +126,11 @@ const Welcome = ({navigation}) => {
                 {rotate: '-5deg'},
               ],
             }}
+            priority={FastImage.priority.normal}
+            resizeMode={FastImage.resizeMode.contain}
           />
 
-          <Image
+          <FastImage
             source={require('../assets/welcome2.jpg')}
             style={{
               width: 100,
@@ -91,10 +145,14 @@ const Welcome = ({navigation}) => {
                 {rotate: '15deg'},
               ],
             }}
+            priority={FastImage.priority.normal}
+            resizeMode={FastImage.resizeMode.contain}
           />
 
-          <Image
+          <FastImage
             source={require('../assets/welcome.jpg')}
+            priority={FastImage.priority.normal}
+            resizeMode={FastImage.resizeMode.contain}
             style={{
               height: 200,
               width: 200,
@@ -194,5 +252,42 @@ const Welcome = ({navigation}) => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)', // Semi-transparent background
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  offerImage: {
+    width: 250,
+    height: 200,
+    borderRadius: 10,
+    marginBottom: 2,
+  },
+  closeButton: {
+    marginTop: 10,
+    fontSize: 16,
+    color: 'blue',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+});
 
 export default Welcome;

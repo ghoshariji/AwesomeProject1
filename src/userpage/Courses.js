@@ -14,19 +14,12 @@ import {fetchCourse, fetchUserDetails} from '../api/userApi';
 import Loader from '../loader/Loader2';
 import {handlePayment1} from '../api/authApi';
 import Button from '../componets/Button';
-import {color} from 'react-native-elements/dist/helpers';
 import {verifyPayment} from '../api/adminApi';
-import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ToastManager,{Toast} from 'toastify-react-native';
 const Courses = ({navigation}) => {
-  const [selectedCourse, setSelectedCourse] = useState(null);
   const [showAllCourses, setShowAllCourses] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [showQR, setShowQR] = useState(false);
-  const [hasPermission, setHasPermission] = useState(null);
-  const [scanned, setScanned] = useState(false);
-  const [qrData, setQRData] = useState('');
-  const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [course, setCourse] = useState([]);
   const [username, setUsername] = useState('');
@@ -87,22 +80,13 @@ const Courses = ({navigation}) => {
     try {
       const data = await verifyPayment({courseId, data1, usertoken});
       if (data.success) {
-        Toast.show({
-          type: 'success',
-          text1: 'Payment Successfully',
-        });
+        Toast.success('Payment Successfully');
       } else {
-        Toast.show({
-          type: 'error',
-          text1: 'Your Money is Safe ...Please Wait ...',
-        });
+        Toast.error('Your Money is Safe ...Please Wait ...');
       }
     } catch (error) {
       console.log('Error ' + error);
-      Toast.show({
-        type: 'error',
-        text1: 'Payment Failed',
-      });
+      Toast.error('Payment Failed');
     }
   };
   const handlePayment = async (courseId, price) => {
@@ -136,16 +120,10 @@ const Courses = ({navigation}) => {
           checkPayment(courseId, data, usertoken);
         })
         .catch(error => {
-          Toast.show({
-            type: 'error',
-            text1: `Payment Failed ${error}`,
-          });
+          Toast.error("Payment Failed");
         });
     } catch (error) {
-      Toast.show({
-        type: 'error',
-        text1: `Payment Failed ${error} , Error to fetch Details`,
-      });
+      Toast.error("Payment Failed, Error to fetch Data");
     }
   };
 
@@ -182,10 +160,10 @@ const Courses = ({navigation}) => {
         />
       </View>
       <Text style={styles.sectionHeader}>Courses</Text>
-      <Toast />
+      <ToastManager/>
 
       {/* Courses list */}
-      <ScrollView>
+      <ScrollView style={{marginBottom:50}}>
         <View style={styles.leftSection}>
           {loading && <Loader />}
           {filteredCourses.map(course => (
@@ -245,22 +223,22 @@ const Courses = ({navigation}) => {
                     </View>
                   </>
                 )}
-
+                <View style={{flexDirection:'row'}}>
               {showAllCourses &&
                 !myCourses.some(
                   myCourseItem => myCourseItem._id === course._id,
                 ) && (
                   <Button
-                    title="Explore Course"
+                    title="Explore"
                     onPress={() => handleExplore(course)}
-                    filled
                     style={{
                       marginTop: 2,
-                      marginBottom: 4,
-                      backgroundColor: '#b3b3ff',
-                      borderColor: '#b3b3ff',
+                      marginBottom: 10,
+                      borderColor: 'grey',
                       padding: 1,
                       margin: 1,
+                      marginRight:2,
+                      width:'50%'
                     }}
                   />
                 )}
@@ -274,10 +252,10 @@ const Courses = ({navigation}) => {
                       handlePayment(course._id, course.courseprice)
                     }
                     filled
-                    style={{marginTop: 2, marginBottom: 2}}
+                    style={{marginTop: 2, marginBottom: 10,width:'50%',marginLeft:1}}
                   />
                 )}
-
+                </View>
               {!showAllCourses &&
                 myCourses.some(
                   myCourseItem => myCourseItem._id === course._id,

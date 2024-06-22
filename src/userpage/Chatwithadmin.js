@@ -6,27 +6,32 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  RefreshControl,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {fetchUserChat, saveUserChat} from '../api/userApi';
 import Loading from '../loader/Loader2';
 import Toast from 'react-native-toast-message';
+
 const ChatWithAdmin = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [message, setNewMessage] = useState('');
   const [oldChat, setOldChat] = useState([]);
+
   const fetchChat = async () => {
     try {
       const userId = await AsyncStorage.getItem('token');
       const data = await fetchUserChat(userId);
       setOldChat(data.data);
-      console.log(data)
       setIsLoading(false);
+      setRefreshing(false);
     } catch (error) {
       setIsLoading(false);
+      setRefreshing(false);
       Toast.show({
         type: 'error',
-        text1: 'NetWork Error .... Please Wait',
+        text1: 'Network Error .... Please Wait',
       });
     }
   };
@@ -42,30 +47,48 @@ const ChatWithAdmin = () => {
       const userId = await AsyncStorage.getItem('token');
       const name = await AsyncStorage.getItem('name');
       const data = await saveUserChat({userId, message, name});
+      setNewMessage('');
       fetchChat();
-    } catch (error) {}
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Network Error .... Please Wait',
+      });
+    }
+  };
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchChat();
   };
 
   return (
     <View style={styles.container}>
       {isLoading && <Loading />}
       <Toast />
-      <ScrollView style={styles.messagesContainer}>
-        {oldChat.length > 0 ? oldChat.map((message,index) => (
-          <View
-            key={index}
-            style={[
-              styles.messageBubble,
-              message.sender === 'admin'
-                ? styles.adminBubble
-                : styles.userBubble,
-            ]}>
-            <Text style={styles.messageText}>{message.message}</Text>
-          </View>
-        )) :(<Text style={{justifyContent:'center',color:'black'}}> Create New Chat</Text>)
-      
-      
-      }
+      <ScrollView
+        style={styles.messagesContainer}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+        {oldChat.length > 0 ? (
+          oldChat.map((message, index) => (
+            <View
+              key={index}
+              style={[
+                styles.messageBubble,
+                message.sender === 'admin'
+                  ? styles.adminBubble
+                  : styles.userBubble,
+              ]}>
+              <Text style={styles.messageText}>{message.message}</Text>
+            </View>
+          ))
+        ) : (
+          <Text style={{justifyContent: 'center', color: 'black'}}>
+            Create New Chat
+          </Text>
+        )}
       </ScrollView>
       <View style={styles.inputContainer}>
         <TextInput

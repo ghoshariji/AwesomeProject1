@@ -42,7 +42,7 @@ const Login = ({navigation}) => {
     e.preventDefault();
     try {
       if (!post.email || ![post.password]) {
-        setLoading(false)
+        setLoading(false);
         Toast.error('All Fields Are required ....');
         return;
       }
@@ -246,7 +246,7 @@ const Login = ({navigation}) => {
             justifyContent: 'center',
           }}>
           <TouchableOpacity
-            onPress={() => Toast.error("Under Development")}
+            onPress={() => Toast.error('Under Development')}
             style={{
               flex: 1,
               alignItems: 'center',
@@ -275,7 +275,7 @@ const Login = ({navigation}) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => Toast.error("Under Development")}
+            onPress={() => Toast.error('Under Development')}
             style={{
               flex: 1,
               alignItems: 'center',
@@ -290,7 +290,7 @@ const Login = ({navigation}) => {
             <Ionicons1
               size={20}
               name="google"
-              color="#34A853"
+              color="#4285F4"
               style={{
                 marginRight: 8,
               }}

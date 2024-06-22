@@ -11,9 +11,9 @@ import {
   Dimensions,
 } from 'react-native';
 import * as ImagePicker from 'react-native-image-picker';
-import {handleAddLecture} from '../api/adminApi';
-import Toast from 'react-native-toast-message';
-import Loader from "../loader/Loader2"
+import {enrollStudentToCourse, handleAddLecture} from '../api/adminApi';
+import ToastManager, {Toast} from 'toastify-react-native';
+import Loader from '../loader/Loader2';
 
 const Addlecture = ({route}) => {
   const {item} = route.params;
@@ -22,15 +22,46 @@ const Addlecture = ({route}) => {
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [selectedVideoIndex, setSelectedVideoIndex] = useState(null);
   const [id, setId] = useState('');
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [studentModal, setStudentModal] = useState(false);
+  const [studentName, setStudentName] = useState('');
 
+  const handleStudentAddStudent = () => {
+    setStudentModal(true);
+  };
+
+  const handleSaveStudent = async e => {
+    e.preventDefault();
+    try {
+      const data = await enrollStudentToCourse({
+        courseId: id,
+        email: studentName,
+      });
+      if (data.statusCode == 209) {
+        Toast.error(data.message);
+      } else {
+        Toast.success(data.message);
+      }
+      setStudentModal(false);
+      setStudentName('');
+    } catch (error) {
+      Toast.error('Internal Server Error');
+      setStudentName('');
+      setStudentModal(false);
+    }
+  };
+
+  const handleStudentCloseModal = () => {
+    setStudentName(''); // Clear input
+    setStudentModal(false); // Close modal
+  };
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     if (item) {
       setVideos(item.lectures);
       setId(item._id);
     }
-    setLoading(false)
+    setLoading(false);
   }, []);
   const uploadVideo = () => {
     ImagePicker.launchImageLibrary({mediaType: 'video'}, response => {
@@ -58,25 +89,16 @@ const Addlecture = ({route}) => {
   };
 
   const saveVideo = async e => {
-    setLoading(true)
+    setLoading(true);
     e.preventDefault();
-    if (
-      !post.title ||
-      !post.lecturename ||
-      !post.lectureabout ||
-      !post.video
-    ) {
-      Toast.show({
-        type: 'error',
-        text1: 'Validation Error',
-        text2: 'All fields are required!',
-      });
-      setLoading(false)
+    if (!post.title || !post.lecturename || !post.lectureabout || !post.video) {
+      Toast.error('Validation Error');
+      setLoading(false);
       return;
     }
     try {
       const formData = new FormData();
-      formData.append('courseId',id);
+      formData.append('courseId', id);
       formData.append('title', post.title);
       formData.append('lecturename', post.lecturename);
       formData.append('lectureabout', post.lectureabout);
@@ -89,21 +111,17 @@ const Addlecture = ({route}) => {
         });
       }
       const data = await handleAddLecture(formData);
-      if(data.success)
-        {
-          setPost({
-            title: '',
-            lecturename: '',
-            lectureabout: '',
-            video: null,
-          });
-          Toast.show({
-            type: 'success',
-            text1: "Submitted Successfully",
-          });
-        }
+      if (data.success) {
+        setPost({
+          title: '',
+          lecturename: '',
+          lectureabout: '',
+          video: null,
+        });
+        Toast.success('Submitted Successfully');
+      }
       setModalVisible(false);
-      setLoading(false)
+      setLoading(false);
     } catch (error) {
       setPost({
         title: '',
@@ -111,12 +129,9 @@ const Addlecture = ({route}) => {
         lectureabout: '',
         video: null,
       });
-      Toast.show({
-        type: 'error',
-        text1: 'Something Went Wrong',
-      });
+      Toast.error('Something Went Wrong');
       setModalVisible(false);
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -130,10 +145,13 @@ const Addlecture = ({route}) => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.headerText1}>{item.coursename}</Text>
       <View style={styles.header}>
         <Text style={styles.headerText}>Course Details</Text>
+        <Button title="Add Student" onPress={handleStudentAddStudent} />
       </View>
-
+      <View style={styles.buttonContainer}></View>
+      <ToastManager />
       <ScrollView style={styles.videoList}>
         {videos.length > 0 ? (
           videos.map((video, index) => (
@@ -152,8 +170,7 @@ const Addlecture = ({route}) => {
         )}
       </ScrollView>
 
-      <Toast />
-      {loading && <Loader/>}
+      {loading && <Loader />}
 
       <View style={styles.uploadButton}>
         <Button
@@ -161,6 +178,33 @@ const Addlecture = ({route}) => {
           onPress={() => setModalVisible(true)}
         />
       </View>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={studentModal}
+        onRequestClose={handleStudentCloseModal}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Add Student</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter email*(req:student has already login)"
+              placeholderTextColor="black"
+              value={studentName}
+              onChangeText={text => setStudentName(text)}
+            />
+            <View style={styles.modalButtons}>
+              <Button
+                title="Cancel"
+                onPress={handleStudentCloseModal}
+                color="red"
+              />
+              <Button title="Save" onPress={handleSaveStudent} />
+            </View>
+          </View>
+        </View>
+      </Modal>
 
       {/* Add/Edit Modal */}
       <Modal
@@ -236,8 +280,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     marginTop: 3,
   },
+  buttonContainer: {
+    marginBottom: 20,
+  },
   header: {
     marginBottom: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    marginTop: 20,
   },
   videoNameText: {
     marginTop: 10,
@@ -248,6 +304,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: 'black',
+  },
+  headerText1: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign:'center',
+    marginTop:5
   },
   videoList: {
     flex: 1,

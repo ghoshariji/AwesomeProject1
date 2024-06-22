@@ -10,7 +10,6 @@ const WatchLecture = ({ lectureUri = "", onClose = () => {} }) => {
   const [duration, setDuration] = useState(0);
   const [showControls, setShowControls] = useState(false);
   const videoRef = useRef(null);
-  console.log(lectureUri)
 
   useEffect(() => {
     Orientation.lockToLandscape();

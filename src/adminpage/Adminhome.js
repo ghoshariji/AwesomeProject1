@@ -38,6 +38,7 @@ const Adminhome = () => {
     teacher1Exp: '',
     teacher2Exp: '',
     courseImg: null,
+    playlist:''
   });
 
   const [timetable, setTimetable] = useState({
@@ -346,6 +347,13 @@ const Adminhome = () => {
                   placeholder="Enter Course Duration* (eg:1)"
                   placeholderTextColor="black"
                   onChangeText={e => handleInput('courseduration', e)}
+                />
+                <TextInput
+                  style={styles.input}
+                  value={post.playlist}
+                  placeholder="Enter YouTube Playlist Id* (eg:Nxdfskfds)"
+                  placeholderTextColor="black"
+                  onChangeText={e => handleInput('playlist', e)}
                 />
                 <TextInput
                   style={styles.input}
