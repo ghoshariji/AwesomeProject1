@@ -103,8 +103,7 @@ const Welcome = ({navigation}) => {
                   source={require('../assets/baa13.jpg')}
                   style={styles.offerImage}
                   priority={FastImage.priority.normal}
-                  resizeMode={FastImage.resizeMode.contain}
-                  //resizeMode="stretch"
+                  resizeMode={FastImage.resizeMode.stretch}
                   PlaceholderContent={<ActivityIndicator />}
                 />
               </View>
@@ -279,7 +278,7 @@ const styles = StyleSheet.create({
     width: 250,
     height: 200,
     borderRadius: 10,
-    marginBottom: 2,
+    marginBottom: 1,
   },
   closeButton: {
     marginTop: 10,

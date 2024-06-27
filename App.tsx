@@ -35,6 +35,9 @@ import Periods from "./src/userpage/Periods";
 import { useEffect } from "react";
 import Lecture from "./src/userpage/Lecture";
 import Accessdenied from "./src/screens/Accessdenied";
+import Unregister from "./src/adminpage/Unregister";
+import Institution from "./src/userpage/Institution";
+import Module from "./src/userpage/Module";
 
 
 const Stack = createNativeStackNavigator();
@@ -235,9 +238,30 @@ export default function App() {
             headerShown: true,
           }}
         />
+         <Stack.Screen
+          name="Unregistered Student"
+          component={Unregister}
+          options={{
+            headerShown: true,
+          }}
+        />
         <Stack.Screen
           name="Access"
           component={Accessdenied}
+        />
+          <Stack.Screen
+          name="Institute"
+          component={Institution}
+          options={{
+            headerShown: true,
+          }}
+        />
+         <Stack.Screen
+          name="Module"
+          component={Module}
+          options={{
+            headerShown: true,
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>
@@ -251,3 +275,4 @@ const styles = StyleSheet.create({
     backgroundColor: "white", // Set the background color to white
   },
 });
+

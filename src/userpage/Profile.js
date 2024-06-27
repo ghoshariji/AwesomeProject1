@@ -1,3 +1,5 @@
+
+
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -16,7 +18,7 @@ import Ionicons1 from 'react-native-vector-icons/MaterialIcons';
 import Ionicons2 from 'react-native-vector-icons/Fontisto';
 import Ionicons3 from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ToastManager,{Toast} from 'toastify-react-native';
+import ToastManager, {Toast} from 'toastify-react-native';
 
 const Profile = ({navigation}) => {
   const [changeNameModalVisible, setChangeNameModalVisible] = useState(false);
@@ -80,11 +82,11 @@ const Profile = ({navigation}) => {
     setEmail(email);
     setPhone(phone);
   }, []);
+
   return (
     <SafeAreaView style={styles.container}>
-         <ToastManager />
+      <ToastManager />
       <View style={styles.topSection}>
-        {/* Profile Image */}
         <TouchableOpacity onPress={handleChangeProfilePic}>
           <Image
             source={
@@ -96,13 +98,30 @@ const Profile = ({navigation}) => {
           />
         </TouchableOpacity>
 
-        <Text style={styles.profileName}>{name}</Text>
-        <Text style={styles.profileInfo}>Phone: +91 {phone}</Text>
-        <Text style={styles.profileInfo}>Email: {email}</Text>
+        <Text style={styles.profileName}>{name || 'Arijit Ghosh'}</Text>
+        <Text style={styles.profileInfo}>Phone: {phone || '7439120030'}</Text>
+        <Text style={styles.profileInfo}>
+          Email: {email || 'arijit1087.be22@chitkarauniversity.edu.in'}
+        </Text>
       </View>
 
       <ScrollView style={styles.optionsContainer}>
-        {/* Change Name Option */}
+        <View style={styles.infoSection}>
+          <Text style={styles.infoTitle}>Profile Details</Text>
+          <View style={styles.infoRow}>
+            <Text style={styles.infoLabel}>Language:</Text>
+            <Text style={styles.infoValue}>Bengali / English</Text>
+          </View>
+        </View>
+
+        <View style={styles.infoSection}>
+          <Text style={styles.infoTitle}>Performance as Doubt Solver</Text>
+          <View style={styles.infoRow}>
+            <Text style={styles.infoLabel}>Total Doubts Solved:</Text>
+            <Text style={styles.infoValue}>--</Text>
+          </View>
+        </View>
+
         <TouchableOpacity
           style={styles.optionItem}
           onPress={() => setChangeNameModalVisible(true)}>
@@ -110,7 +129,6 @@ const Profile = ({navigation}) => {
           <Text style={{color: 'black', marginLeft: 30}}>Change Name</Text>
         </TouchableOpacity>
 
-        {/* Change Password Option */}
         <TouchableOpacity
           style={styles.optionItem}
           onPress={() => setChangePasswordModalVisible(true)}>
@@ -118,7 +136,6 @@ const Profile = ({navigation}) => {
           <Text style={{color: 'black', marginLeft: 30}}>Change Password</Text>
         </TouchableOpacity>
 
-        {/* Change Profile Picture Option */}
         <TouchableOpacity
           style={styles.optionItem}
           onPress={handleChangeProfilePic}>
@@ -128,14 +145,10 @@ const Profile = ({navigation}) => {
           </Text>
         </TouchableOpacity>
 
-        {/* Log out Option */}
-
         <TouchableOpacity style={styles.optionItem} onPress={handleLogout}>
           <Ionicons3 name="logout" color="red" size={22} />
           <Text style={{color: 'black', marginLeft: 33}}>Log out</Text>
         </TouchableOpacity>
-
-     
       </ScrollView>
 
       <Modal
@@ -144,17 +157,7 @@ const Profile = ({navigation}) => {
         visible={changeNameModalVisible}
         onRequestClose={() => setChangeNameModalVisible(false)}>
         <View style={styles.modalContainer}>
-          {/* <View style={styles.modalHeader}>
-            <TouchableOpacity
-              onPress={handleCloseNameModal}
-              style={styles.closeIcon}
-            >
-              <Ionicons name="close" size={24} color="black" />
-            </TouchableOpacity>
-          </View> */}
-
           <View style={styles.modalContent}>
-            {/* Change Name */}
             <TouchableOpacity
               onPress={() => setChangeNameModalVisible(false)}
               style={[styles.closeIcon, {alignItems: 'flex-end'}]}>
@@ -178,7 +181,6 @@ const Profile = ({navigation}) => {
         </View>
       </Modal>
 
-      {/* Modal for Change Password */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -186,7 +188,6 @@ const Profile = ({navigation}) => {
         onRequestClose={() => setChangePasswordModalVisible(false)}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            {/* Change Password */}
             <TouchableOpacity
               onPress={() => setChangePasswordModalVisible(false)}
               style={[styles.closeIcon, {alignItems: 'flex-end'}]}>
@@ -224,17 +225,14 @@ const Profile = ({navigation}) => {
             <Text style={styles.closeButtonText}>✕</Text>
           </TouchableOpacity>
           <View style={styles.modalContent}>
-            {/* <TextInput type="file" /> */}
             <TouchableOpacity onPress={handleChangeProfilePic}>
               <Text>Select Image</Text>
             </TouchableOpacity>
           </View>
-          {/* <TouchableOpacity onPress={submitImage}>
-            <Text>Submit</Text>
-          </TouchableOpacity> */}
         </View>
       </Modal>
-    </SafeAreaView>
+
+</SafeAreaView>
   );
 };
 
@@ -245,10 +243,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   topSection: {
-    marginTop: 40,
+    marginTop: 5,
     alignItems: 'center',
     paddingTop: 20,
-    paddingBottom: 40,
+    paddingBottom: 10,
     marginVertical: 2,
   },
   profileImage: {
@@ -259,61 +257,96 @@ const styles = StyleSheet.create({
   },
   profileName: {
     fontSize: 24,
-    fontWeight: 'bold',
     marginBottom: 5,
     color: 'black',
+        fontFamily:'Rowdies-Light'
   },
   profileInfo: {
     fontSize: 16,
     color: 'black',
+        fontFamily:'Rowdies-Light'
   },
   optionsContainer: {
-    marginTop: 20,
+    marginTop: 5,
+  },
+  infoSection: {
+    marginVertical: 10,
+    padding: 10,
+    backgroundColor: '#f8f8f8',
+    borderRadius: 10,
+  },
+  infoTitle: {
+    fontSize: 18,
+    marginBottom: 10,
+    color: 'black',
+    fontFamily:'Rowdies-Light'
+  },
+  infoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  infoLabel: {
+    fontSize: 16,
+    color: '#333',
+  },
+  infoValue: {
+    fontSize: 16,
+    color: '#555',
   },
   optionItem: {
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
     flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
+    padding: 10,
+    backgroundColor: '#f8f8f8',
+    borderRadius: 10,
   },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalHeader: {
-    width: '100%',
-    alignItems: 'flex-end',
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
   modalContent: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
     width: '80%',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+  },
+  closeIcon: {
+    alignSelf: 'flex-end',
   },
   input: {
+    height: 40,
+    borderColor: 'gray',
     borderWidth: 1,
-    borderColor: '#ccc',
     borderRadius: 5,
-    padding: 10,
     marginBottom: 10,
+    width: '100%',
+    paddingHorizontal: 10,
     color: 'black',
   },
   button: {
-    backgroundColor: '#2196F3',
-    paddingVertical: 12,
+    backgroundColor: 'blue',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     borderRadius: 5,
-    alignItems: 'center',
-    marginBottom: 10,
   },
   buttonText: {
     color: '#fff',
     fontWeight: 'bold',
   },
-  closeIcon: {
-    padding: 5,
+  closeButton: {
+    alignSelf: 'flex-end',
+    margin: 10,
+  },
+  closeButtonText: {
+    fontSize: 24,
+    color: 'red',
   },
 });
+
 
 export default Profile;

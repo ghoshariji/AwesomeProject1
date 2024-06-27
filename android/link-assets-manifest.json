@@ -1,0 +1,33 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/font/JosefinSans-Italic-VariableFont_wght copy.ttf",
+      "sha1": "6c47591a940e3c86a268d5bed1e151214eb4d1df"
+    },
+    {
+      "path": "assets/font/JosefinSans-VariableFont_wght.ttf",
+      "sha1": "ad2439d6f0dfc795c4dbefb342383f9f02810427"
+    },
+    {
+      "path": "assets/font/Rowdies-Bold.ttf",
+      "sha1": "febaeb3ad737aae56f4db17b1303471a305872a5"
+    },
+    {
+      "path": "assets/font/Rowdies-Light.ttf",
+      "sha1": "c20a32b1a8b59f0f6d167bff53c9eda05fc87976"
+    },
+    {
+      "path": "assets/font/Rowdies-Regular.ttf",
+      "sha1": "2f7b1ab72139c78cfe7abbd49fab9b1bebf44d57"
+    },
+    {
+      "path": "assets/font/RubikMonoOne-Regular.ttf",
+      "sha1": "494e30805dc070dfa19c14f69db2dc887ed12556"
+    },
+    {
+      "path": "assets/font/SignikaNegative-VariableFont_wght.ttf",
+      "sha1": "9845585007d6f9d53a4ed3002af816a6eca59103"
+    }
+  ]
+}

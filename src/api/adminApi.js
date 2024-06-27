@@ -81,8 +81,25 @@ export const saveAdminChat = async (payload) => {
 
 export const enrollStudentToCourse = async (payload) => {
   try {
-    console.log(payload)
     const data = await axios.post(`/v1/api/course/add-student-course`,payload);
+    return data.data;
+  } catch (error) {
+    console.log('Error' + error);
+  }
+};
+
+export const registerUser = async () => {
+  try {
+    const data = await axios.get("/v1/api/auth/registerUserList",);
+    return data.data;
+  } catch (error) {
+    console.log('Error' + error);
+  }
+};
+
+export const makeRegister = async (payload) => {
+  try {
+    const data = await axios.post("/v1/api/auth/makeRegister",payload);
     return data.data;
   } catch (error) {
     console.log('Error' + error);

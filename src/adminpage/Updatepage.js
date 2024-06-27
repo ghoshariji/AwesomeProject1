@@ -159,6 +159,25 @@ const Updatepage = ({ navigation }) => {
             </View>
           </View>
           <View style={styles.line} />
+          <TouchableOpacity style={styles.academicHeader} onPress={()=>navigation.navigate("Unregistered Student")}>
+            <Ionicons2
+              name="registered"
+              size={24}
+              color="black"
+              style={styles.icon}
+            />
+            <Text style={styles.sectionTitle}>Unregistered Student</Text>
+            <View style={styles.arrowContainer}>
+              <TouchableOpacity onPress={()=>navigation.navigate("Unregistered Student")}>
+                <Ionicons
+                  name="chevron-forward-outline"
+                  size={24}
+                  color="black"
+                />
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
+          <View style={styles.line} />
           <TouchableOpacity style={styles.academicHeader} onPress={()=>navigation.navigate("Chat List")}>
             <Ionicons5
               name="wechat"

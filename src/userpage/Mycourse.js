@@ -3,24 +3,16 @@ import {
   View,
   ScrollView,
   Text,
-  TouchableOpacity,
   Modal,
   BackHandler,
   StyleSheet,
   Image,
-  Alert,
-  ActivityIndicator,
 } from 'react-native';
-import {WebView} from 'react-native-webview';
 import Orientation from 'react-native-orientation-locker';
 import ToastManager, {Toast} from 'toastify-react-native';
-import axios from 'axios';
-import Button from '../componets/Button';
-import {color} from 'react-native-elements/dist/helpers';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Periods from './Periods';
 import PagerView from 'react-native-pager-view';
-import {NavigationContainer} from '@react-navigation/native';
 import Lecture from './Lecture';
 const Mycourse = ({route, navigation}) => {
   const {course} = route.params;
@@ -44,10 +36,6 @@ const Mycourse = ({route, navigation}) => {
 
     return () => backHandler.remove();
   }, [selectedVideo]);
-
-
- 
-
 
   const handleExamPress = () => {
     Toast.success('Not Found');
@@ -83,13 +71,16 @@ const Mycourse = ({route, navigation}) => {
         </View>
 
         {/* making here the topMaterialNavigator */}
-          <Tab.Navigator>
-            <Tab.Screen name="Class" component={Lecture} initialParams={{course}}/>
-            <Tab.Screen name="Schedule" component={Periods} />
-            <Tab.Screen name="Exam" component={Periods} />
-            {/* <Tab.Screen name="Settings" component={SettingsScreen} /> */}
-          </Tab.Navigator>
-
+        <Tab.Navigator>
+          <Tab.Screen
+            name="Class"
+            component={Lecture}
+            initialParams={{course}}
+          />
+          <Tab.Screen name="Schedule" component={Periods} />
+          <Tab.Screen name="Exam" component={Periods} />
+          {/* <Tab.Screen name="Settings" component={SettingsScreen} /> */}
+        </Tab.Navigator>
 
         {/* <View style={styles.section}>
           <Text style={styles.sectionTitle}>Exams</Text>
@@ -99,9 +90,8 @@ const Mycourse = ({route, navigation}) => {
             <Text style={styles.takeQuizText}>Take Quiz</Text>
           </TouchableOpacity>
         </View> */}
-       
       </ScrollView>
-    
+
       <Modal
         visible={showExamModal}
         transparent={true}

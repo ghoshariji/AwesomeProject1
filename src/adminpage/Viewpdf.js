@@ -3,7 +3,7 @@ import { View, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import Pdf from 'react-native-pdf';
 
 const Viewpdf = ({ route }) => {
-  const { item } = route.params;
+ // const { item } = route.params;
   const [loading, setLoading] = useState(true);
 
   const handleLoadComplete = () => {

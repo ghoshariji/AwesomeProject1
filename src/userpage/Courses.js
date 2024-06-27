@@ -16,7 +16,7 @@ import {handlePayment1} from '../api/authApi';
 import Button from '../componets/Button';
 import {verifyPayment} from '../api/adminApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ToastManager,{Toast} from 'toastify-react-native';
+import ToastManager, {Toast} from 'toastify-react-native';
 const Courses = ({navigation}) => {
   const [showAllCourses, setShowAllCourses] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -120,13 +120,12 @@ const Courses = ({navigation}) => {
           checkPayment(courseId, data, usertoken);
         })
         .catch(error => {
-          Toast.error("Payment Failed");
+          Toast.error('Payment Failed');
         });
     } catch (error) {
-      Toast.error("Payment Failed, Error to fetch Data");
+      Toast.error('Payment Failed, Error to fetch Data');
     }
   };
-
   return (
     <SafeAreaView style={styles.container}>
       {/* Toggle buttons */}
@@ -160,10 +159,10 @@ const Courses = ({navigation}) => {
         />
       </View>
       <Text style={styles.sectionHeader}>Courses</Text>
-      <ToastManager/>
+      <ToastManager />
 
       {/* Courses list */}
-      <ScrollView style={{marginBottom:50}}>
+      <ScrollView style={{marginBottom: 50}}>
         <View style={styles.leftSection}>
           {loading && <Loader />}
           {filteredCourses.map(course => (
@@ -173,25 +172,45 @@ const Courses = ({navigation}) => {
                   myCourseItem => myCourseItem._id === course._id,
                 ) && (
                   <>
-                    <Image
-                      source={{
-                        uri: `https://academic-server-native.onrender.com/upload/${course.courseImg}`,
-                      }}
-                      style={styles.courseImage}
-                    />
-
-                    <Text style={styles.courseTitle}>{course.coursename}</Text>
-                    <View style={styles.priceContainer}>
-                      <Text style={styles.originalPrice}>
-                        ${course.courseprice}
-                      </Text>
-                      <Text style={styles.discountedPrice}>
-                        ${course.price - course.discount}
-                      </Text>
-
-                      <Text style={styles.discount}>
-                        {course.discount}% OFF
-                      </Text>
+                    <View style={styles.card12}>
+                      <View style={styles.headercourse}>
+                        <Text style={styles.headerTextcourse}>
+                          {course.coursename} 2024 batch
+                        </Text>
+                        <View style={styles.newBadgecourse}>
+                          <Text style={styles.newBadgeTextcourse}>New</Text>
+                        </View>
+                      </View>
+                      <Image
+                        source={{
+                          uri: `https://academic-server-native.onrender.com/upload/${course.courseImg}`,
+                        }}
+                        style={styles.cardImage12}
+                      />
+                      <View style={styles.cardContent12}>
+                        <Text style={styles.cardTitle12}>
+                          {course.coursename}
+                        </Text>
+                        <Text style={styles.cardSubtitle12}>
+                          ☆ {course.coursetitle}
+                        </Text>
+                        <Text style={styles.cardDescription12}>
+                          ☆ Valid till {course.courseduration} year from the
+                          purchase Date
+                        </Text>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                          }}>
+                          <Text style={styles.cardPrice12}>
+                            ☆ ₹ {course.courseprice} /-
+                          </Text>
+                          <Text style={styles.cardDiscount12}>
+                            Discount of 25% applied
+                          </Text>
+                        </View>
+                      </View>
                     </View>
                   </>
                 )}
@@ -209,53 +228,31 @@ const Courses = ({navigation}) => {
                     />
 
                     <Text style={styles.courseTitle}>{course.coursename}</Text>
-                    <View style={styles.priceContainer}>
-                      <Text style={styles.originalPrice}>
-                        ${course.courseprice}
-                      </Text>
-                      <Text style={styles.discountedPrice}>
-                        ${course.price - course.discount}
-                      </Text>
-
-                      <Text style={styles.discount}>
-                        {course.discount}% OFF
-                      </Text>
-                    </View>
+                    <View style={styles.priceContainer}></View>
                   </>
                 )}
-                <View style={{flexDirection:'row'}}>
-              {showAllCourses &&
-                !myCourses.some(
-                  myCourseItem => myCourseItem._id === course._id,
-                ) && (
-                  <Button
-                    title="Explore"
-                    onPress={() => handleExplore(course)}
-                    style={{
-                      marginTop: 2,
-                      marginBottom: 10,
-                      borderColor: 'grey',
-                      padding: 1,
-                      margin: 1,
-                      marginRight:2,
-                      width:'50%'
-                    }}
-                  />
-                )}
-              {showAllCourses &&
-                !myCourses.some(
-                  myCourseItem => myCourseItem._id === course._id,
-                ) && (
-                  <Button
-                    title="Buy Now"
-                    onPress={() =>
-                      handlePayment(course._id, course.courseprice)
-                    }
-                    filled
-                    style={{marginTop: 2, marginBottom: 10,width:'50%',marginLeft:1}}
-                  />
-                )}
-                </View>
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
+                {showAllCourses &&
+                  !myCourses.some(
+                    myCourseItem => myCourseItem._id === course._id,
+                  ) && (
+                    <View style={styles.cardButtons12}>
+                      <TouchableOpacity
+                        style={styles.exploreButton12}
+                        onPress={() => handleExplore(course)}>
+                        <Text style={styles.epxlore12}>EXPLORE</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.buyButton12}
+                        onPress={() =>
+                          handlePayment(course._id, course.courseprice)
+                        }>
+                        <Text style={styles.buttonText12}>BUY NOW</Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+              </View>
               {!showAllCourses &&
                 myCourses.some(
                   myCourseItem => myCourseItem._id === course._id,
@@ -352,10 +349,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   sectionHeader: {
-    fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 1,
     fontSize: 24,
     color: 'black',
+    fontFamily: 'Rowdies-Light',
   },
   leftSection: {
     flex: 1,
@@ -445,6 +442,109 @@ const styles = StyleSheet.create({
   },
   payNowText: {
     color: 'white',
+    fontWeight: 'bold',
+  },
+
+  card12: {
+    backgroundColor: '#ebeffc',
+    overflow: 'hidden',
+    width: '100%',
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  cardImage12: {
+    width: '100%',
+    height: 150,
+    borderRadius: 8,
+    margin: 1,
+  },
+  cardContent12: {
+    padding: 16,
+    fontFamily: 'Rowdies-Regular',
+  },
+  cardTitle12: {
+    fontSize: 18,
+    fontFamily: 'Rowdies-Regular',
+    marginBottom: 8,
+    color: 'black',
+  },
+  cardSubtitle12: {
+    fontSize: 14,
+    color: '#888',
+    marginBottom: 8,
+    color: 'black',
+  },
+  cardDescription12: {
+    fontSize: 14,
+    marginBottom: 8,
+    color: 'black',
+  },
+  cardPrice12: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 4,
+    color: 'black',
+  },
+  cardDiscount12: {
+    fontSize: 14,
+    color: 'green',
+    marginBottom: 16,
+  },
+  cardButtons12: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  exploreButton12: {
+    backgroundColor: '#cdd9f7',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 4,
+    width: '48%',
+  },
+  buyButton12: {
+    backgroundColor: '#214bbf',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 4,
+    width: '48%',
+  },
+  buttonText12: {
+    color: '#fff',
+    textAlign: 'center',
+    fontFamily: 'Rowdies-Light',
+  },
+  epxlore12: {
+    color: 'black',
+    textAlign: 'center',
+    fontFamily: 'Rowdies-Light',
+  },
+  headercourse: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  headerTextcourse: {
+    fontSize: 18,
+    color: '#000',
+    fontFamily:'Rowdies-Bold'
+
+  },
+  newBadgecourse: {
+    backgroundColor: '#FFD700',
+    borderRadius: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  newBadgeTextcourse: {
+    color: '#000',
     fontWeight: 'bold',
   },
 });

@@ -25,6 +25,7 @@ const Adminhome = () => {
   const [image, setImage] = useState('');
   const [timetablemodal, settimetableModal] = useState(false);
   const [noticeModal, setNoticeModal] = useState(false);
+  const [instituteqaModal, setInstituteqaModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -228,6 +229,81 @@ const Adminhome = () => {
     // Add your search logic here
     // console.log("Searching for:", text);
   };
+
+  // for the institute question and answer
+
+  const [insQues, setInsQues] = useState({
+    title: '',
+    quesans: null,
+  });
+  const handleInsFile = async () => {
+    try {
+      const file = await DocumentPicker.pick({
+        type: [DocumentPicker.types.pdf],
+      });
+      setInsQues({...insQues, quesans: file[0]});
+    } catch (error) {
+      if (DocumentPicker.isCancel(err)) {
+        console.log('User cancelled')
+        } else {
+        throw err;
+        }
+    }
+  };
+  const handleInsQues = (name, value) => {
+    setInsQues({...insQues, [name]: value});
+  };
+
+  const handleInsQuesSubmit = async(e) => {
+    setLoading(true);
+    e.preventDefault();
+
+    try {
+      const formData = new FormData();
+      formData.append('title', insQues.title);
+      if (insQues.quesans) {
+        const uri = insQues.quesans;
+        formData.append('quesans', {
+          uri: uri.uri,
+          name: uri.name,
+          type: 'application/pdf',
+        });
+      }
+      console.log(formData)
+      setNoticeModal(false);
+      setLoading(false)
+      // const data = await handleInsQuesAns(formData);
+      // if (data.data.success) {
+      //   setLoading(false);
+      //   setNotice("")
+      //   Toast.show({
+      //     type: 'success',
+      //     text1: 'Notice Uploaded Successfully',
+      //     position: 'bottom',
+      //   });
+      // }
+      // else{
+      //   setNotice("")
+      //   setLoading(false)
+      //   Toast.show({
+      //     type: 'error',
+      //     text1: 'Network error...',
+      //     position: 'bottom',
+      //   });
+      // }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setLoading(false);
+      setNoticeModal(false);
+      setNotice("")
+      Toast.show({
+        type: 'error',
+        text1: 'Something went Wrong',
+        position: 'bottom',
+      });
+    }
+  };
+  
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
@@ -271,6 +347,13 @@ const Adminhome = () => {
         style={styles.card}
         onPress={() => setNoticeModal(true)}>
         <Text style={styles.cardText}>Upload Notice</Text>
+        <Ionicons name="chevron-forward-outline" size={24} color="black" />
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.card}
+        onPress={() => setInstituteqaModal(true)}>
+        <Text style={styles.cardText}>Institute Question & Answer </Text>
         <Ionicons name="chevron-forward-outline" size={24} color="black" />
       </TouchableOpacity>
 
@@ -509,6 +592,61 @@ const Adminhome = () => {
           </View>
         </View>
       </Modal>
+
+
+{/* upload institute pdf */}
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={instituteqaModal}
+        onRequestClose={() => setInstituteqaModal(false)}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalView2}>
+            <TouchableOpacity
+              style={[styles.closeButton, {backgroundColor: 'red'}]} // Red close button
+              onPress={() => setInstituteqaModal(false)}>
+              <Text style={styles.closeButtonText}>✕</Text>
+            </TouchableOpacity>
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+              <View style={styles.modalContent1}>
+                <TextInput
+                  style={styles.input}
+                  value={insQues.title}
+                  placeholder="Enter title of the PDF*"
+                  placeholderTextColor="black"
+                  onChangeText={e => handleInsQues('title', e)}
+                />
+                <TouchableOpacity onPress={handleInsFile}>
+                  <View style={styles.selectFileButton}>
+                    <MaterialIcons name="attach-file" size={24} color="black" />
+                    <Text style={styles.selectFileText}>
+                      ENter the Pdf title*
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                {/* Display selected file */}
+                {insQues.quesans && (
+                  <View style={styles.selectedFileContainer}>
+                    <MaterialIcons name="description" size={24} color="black" />
+                    <Text
+                      style={
+                        styles.selectedFileName
+                      }>{`Selected File: ${insQues.quesans.name}`}</Text>
+                  </View>
+                )}
+                <TouchableOpacity
+                  style={[styles.submitButton, {backgroundColor: 'green'}]} // Green save button
+                  onPress={handleInsQuesSubmit}>
+                  <Text style={styles.submitButtonText}>Save</Text>
+                </TouchableOpacity>
+              </View>
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
+
+
     </View>
   );
 };
